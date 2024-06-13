@@ -1,4 +1,4 @@
-package org.inferis.mixin;
+package org.inferis.manicminer.mixin;
 
 import net.minecraft.server.MinecraftServer;
 import org.spongepowered.asm.mixin.Mixin;

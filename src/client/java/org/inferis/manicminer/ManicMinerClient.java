@@ -1,4 +1,4 @@
-package org.inferis;
+package org.inferis.manicminer;
 
 import net.fabricmc.api.ClientModInitializer;
 
