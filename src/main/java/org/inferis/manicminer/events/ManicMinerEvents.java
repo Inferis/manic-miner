@@ -10,6 +10,6 @@ import net.minecraft.world.World;
 public class ManicMinerEvents {
     public static void afterBlockBreak(World world, ServerPlayerEntity player, BlockPos pos, BlockState state) {
         VeinMiner miner = new VeinMiner(world, player);
-        miner.mine(pos, state);
+        miner.mine(pos);
     }    
 }
