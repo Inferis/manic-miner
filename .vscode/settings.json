@@ -1,0 +1,13 @@
+{
+    "java.project.sourcePaths": [
+        "src/client/java",
+        "src/main/java"
+    ],
+    "java.project.outputPath": "bin",
+    "java.project.referencedLibraries": [
+        ".gradle/loom-cache/**/*.jar",
+        "~/.gradle/caches/**/*.jar"
+    ],
+    "java.configuration.updateBuildConfiguration": "interactive",
+    "java.jdt.ls.vmargs": "-XX:+UseParallelGC -XX:GCTimeRatio=4 -XX:AdaptiveSizePolicyWeight=90 -Dsun.zip.disableMemoryMapping=true -Xmx2G -Xms100m -Xlog:disable",
+}

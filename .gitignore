@@ -22,7 +22,6 @@ remappedSrc/
 # vscode
 
 .settings/
-.vscode/
 bin/
 .classpath
 .project
