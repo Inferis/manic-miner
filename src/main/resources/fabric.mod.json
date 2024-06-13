@@ -3,23 +3,23 @@
 	"id": "manic-miner",
 	"version": "${version}",
 	"name": "Manic Miner",
-	"description": "This is an example description! Tell everyone what your mod is about!",
+	"description": "Vein Mining On Steroids.",
 	"authors": [
-		"Me!"
+		"Inferis"
 	],
 	"contact": {
 		"homepage": "https://fabricmc.net/",
 		"sources": "https://github.com/FabricMC/fabric-example-mod"
 	},
-	"license": "CC0-1.0",
+	"license": "MIT",
 	"icon": "assets/manic-miner/icon.png",
 	"environment": "*",
 	"entrypoints": {
 		"main": [
-			"org.inferis.ManicMiner"
+			"org.inferis.manicminer.ManicMiner"
 		],
 		"client": [
-			"org.inferis.ManicMinerClient"
+			"org.inferis.manicminer.ManicMinerClient"
 		]
 	},
 	"mixins": [
