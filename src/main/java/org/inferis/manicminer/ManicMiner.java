@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 public class ManicMiner implements ModInitializer {
 	public static final String MODID = "manic-miner";
     public static final Logger LOGGER = LoggerFactory.getLogger(MODID);
+    public static final ManicMinerConfig CONFIG = new ManicMinerConfig();
 
 	@Override
 	public void onInitialize() {

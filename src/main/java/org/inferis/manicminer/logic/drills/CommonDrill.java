@@ -1,5 +1,7 @@
 package org.inferis.manicminer.logic.drills;
 
+import org.inferis.manicminer.ManicMiner;
+
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -12,8 +14,7 @@ public class CommonDrill extends DrillBase {
 
     @Override
     public boolean canHandle(String blockId) {
-        _log("common = " + blockId + " " + (blockId.equals("minecraft:stone")));
-        return 
+        return ManicMiner.CONFIG.allowCommonBlocks && (
             blockId.equals("minecraft:stone") || blockId.equals("minecraft:deepslate") ||
             blockId.equals("minecraft:granite") || blockId.equals("minecraft:andesite") || blockId.equals("minecraft:diorite") ||
             blockId.equals("minecraft:gravel") || blockId.equals("minecraft:tuff") ||
@@ -21,7 +22,8 @@ public class CommonDrill extends DrillBase {
             blockId.equals("minecraft:hardened_clay") || blockId.equals("minecraft:stained_hardened_clay") ||
             blockId.equals("minecraft:sandstone") || blockId.equals("minecraft:sand") || 
             blockId.equals("minecraft:soulsand") || blockId.equals("minecraft:soulsoil") || 
-            blockId.equals("minecraft:dirt") || blockId.equals("minecraft:clay");
+            blockId.equals("minecraft:dirt") || blockId.equals("minecraft:clay")
+        );
     }
 
     @Override

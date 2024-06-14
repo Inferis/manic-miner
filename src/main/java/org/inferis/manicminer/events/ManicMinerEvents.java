@@ -1,5 +1,6 @@
 package org.inferis.manicminer.events;
 
+import org.inferis.manicminer.ManicMiner;
 import org.inferis.manicminer.logic.Drill;
 import org.inferis.manicminer.logic.drills.*;
 import java.util.ArrayList;
@@ -14,12 +15,15 @@ public class ManicMinerEvents {
     private static ArrayList<ServerPlayerEntity> veinminingPlayers = new ArrayList<ServerPlayerEntity>();
 
     public static boolean beforeBlockBreak(World world, ServerPlayerEntity player, BlockPos pos, BlockState state) {
-        // tryBlockBreak will recurse into this, so we want to avoid calling this for the subsequent mined blocks
-        if (player.isInSneakingPose() && !veinminingPlayers.contains(player)) {
+        // tryBlockBreak will recurse into this, so we want to avoid calling this for the subsequent mined blocks.
+        var isVeinMining = veinminingPlayers.contains(player);
+        var isRightPose = true;
+        if (ManicMiner.CONFIG.mustSneak) {
+            isRightPose = player.isInSneakingPose();
+        }
+        if (isRightPose && !isVeinMining) {
             veinminingPlayers.add(player);
-
             var shouldContinue = !mine(world, player, pos);
-
             veinminingPlayers.remove(player);
             return shouldContinue;
         }
@@ -32,6 +36,7 @@ public class ManicMinerEvents {
     }    
 
     private static boolean mine(World world, ServerPlayerEntity player, BlockPos pos) {
+        // Check ores first, than wood, than ice and than the common blocks (stone etc).
         var drills = new Drill[] {
             new OreDrill(world, player),
             new WoodDrill(world, player),
