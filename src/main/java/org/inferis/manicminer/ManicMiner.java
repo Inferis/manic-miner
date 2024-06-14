@@ -15,6 +15,15 @@ public class ManicMiner implements ModInitializer {
 
 	@Override
 	public void onInitialize() {
+		PlayerBlockBreakEvents.BEFORE.register((world, player, pos, state, blockEntity) -> {
+			if (player instanceof ServerPlayerEntity serverPlayer) {
+				return ManicMinerEvents.beforeBlockBreak(world, serverPlayer, pos, state);
+			}
+			else {
+				return true;
+			}
+		});
+
 		PlayerBlockBreakEvents.AFTER.register((world, player, pos, state, blockEntity) -> {
 			if (player instanceof ServerPlayerEntity serverPlayer) {
 				ManicMinerEvents.afterBlockBreak(world, serverPlayer, pos, state);
