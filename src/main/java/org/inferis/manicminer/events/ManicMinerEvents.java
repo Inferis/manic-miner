@@ -1,6 +1,5 @@
 package org.inferis.manicminer.events;
 
-import org.inferis.manicminer.ManicMiner;
 import org.inferis.manicminer.logic.Drill;
 import org.inferis.manicminer.logic.drills.*;
 import java.util.ArrayList;

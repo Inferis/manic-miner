@@ -5,9 +5,6 @@ import org.inferis.manicminer.ManicMiner;
 
 import java.util.ArrayList;
 
-import net.minecraft.block.pattern.CachedBlockPosition;
-import net.minecraft.item.ItemStack;
-import net.minecraft.registry.Registries;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.PlainTextContent;
