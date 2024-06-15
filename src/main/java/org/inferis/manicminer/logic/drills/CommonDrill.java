@@ -4,6 +4,8 @@ import org.inferis.manicminer.ManicMiner;
 
 import java.util.ArrayDeque;
 
+import net.minecraft.block.Block;
+import net.minecraft.registry.Registries;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -24,13 +26,13 @@ public class CommonDrill extends DrillBase {
             blockId.equals("minecraft:hardened_clay") || blockId.equals("minecraft:stained_hardened_clay") ||
             blockId.equals("minecraft:sandstone") || blockId.equals("minecraft:sand") || 
             blockId.equals("minecraft:soulsand") || blockId.equals("minecraft:soulsoil") || 
-            blockId.equals("minecraft:dirt") || blockId.equals("minecraft:clay")
+            blockId.equals("minecraft:dirt") || blockId.equals("minecraft:grass_block") || blockId.equals("minecraft:clay") ||
+            blockId.endsWith("ice")
         );
     }
 
     @Override
     public boolean drill(BlockPos startPos) {
-        _log("Common");
         var initialBlock = world.getBlockState(startPos).getBlock();
         var processed = 0;
         var pending = new ArrayDeque<BlockPos>();
@@ -44,7 +46,7 @@ public class CommonDrill extends DrillBase {
                 // look around current block
                 forXYZ(blockPos, 2, newPos -> {
                     var block = world.getBlockState(newPos).getBlock();
-                    if (block == initialBlock && !pending.contains(newPos)) {
+                    if (blocksMatch(block, initialBlock) && !pending.contains(newPos)) {
                         var lookingDown = player.getPitch() > 33.0;
                         if (lookingDown || newPos.getY() >= player.getBlockY()) {
                             pending.add(newPos);
@@ -55,6 +57,20 @@ public class CommonDrill extends DrillBase {
         }
 
         return true;
+    }
+
+    private boolean blocksMatch(Block blockA, Block blockB) {
+        if (blockA == blockB) {
+            return true;
+        }
+
+        // special case for dirt
+        var blockAId = Registries.BLOCK.getId(blockA).toString();
+        var blockBId = Registries.BLOCK.getId(blockB).toString();
+
+        return
+            (blockAId == "minecraft:dirt" && blockBId == "minecraft:grass_block") ||
+            (blockAId == "minecraft:grass_block" && blockBId == "minecraft:dirt");
     }
     
 }

@@ -25,7 +25,6 @@ public class OreDrill extends DrillBase {
 
     @Override
     public boolean drill(BlockPos startPos) {
-        _log("Ore");
         var initialBlock = world.getBlockState(startPos).getBlock();
         var processed = 0;
         var pending = new ArrayDeque<BlockPos>();
@@ -35,15 +34,20 @@ public class OreDrill extends DrillBase {
             BlockPos orePos = pending.remove();
             var oreBlock = world.getBlockState(orePos).getBlock();
             if (player.interactionManager.tryBreakBlock(orePos)) {
-                ++processed;
+                if (oreBlock == initialBlock) {
+                    ++processed;
+                }
                 
-                // look around current block
-                forXYZ(orePos, 1, newPos -> {
-                    var block = world.getBlockState(newPos).getBlock();
-                    if (oreBlock == initialBlock && !pending.contains(newPos)) {
-                        pending.add(newPos);
-                    }
-                });
+                if (oreBlock == initialBlock) {
+                    // look around current block
+                    forXYZ(orePos, 1, newPos -> {
+                        var newBlock = world.getBlockState(newPos).getBlock();
+                        var newBlockId = Registries.BLOCK.getId(newBlock).toString();
+                        if (!pending.contains(newPos) && (!canHandle(newBlockId) || newBlock == oreBlock)) {
+                            pending.add(newPos);
+                        }
+                    });
+                }
             }
         }
 

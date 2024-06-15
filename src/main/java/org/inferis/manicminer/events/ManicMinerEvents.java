@@ -45,7 +45,6 @@ public class ManicMinerEvents {
         var drills = new Drill[] {
             new OreDrill(world, player),
             new WoodDrill(world, player),
-            new IceDrill(world, player),
             new CommonDrill(world, player)
         };
 
