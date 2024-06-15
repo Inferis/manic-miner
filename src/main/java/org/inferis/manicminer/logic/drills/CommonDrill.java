@@ -38,7 +38,7 @@ public class CommonDrill extends DrillBase {
         var pending = new ArrayDeque<BlockPos>();
         pending.add(startPos);
 
-        while (!pending.isEmpty() && processed < ManicMiner.CONFIG.maxVeinSize) {
+        while (!pending.isEmpty() && processed < ManicMiner.CONFIG.maxCommonSize) {
             BlockPos blockPos = pending.remove();
             if (player.interactionManager.tryBreakBlock(blockPos)) {
                 ++processed;

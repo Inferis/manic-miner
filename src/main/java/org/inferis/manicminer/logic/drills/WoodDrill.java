@@ -27,7 +27,7 @@ public class WoodDrill extends DrillBase {
         var pending = new ArrayDeque<BlockPos>();
         pending.add(startPos);
 
-        while (!pending.isEmpty() && processed < ManicMiner.CONFIG.maxVeinSize) {
+        while (!pending.isEmpty() && processed < ManicMiner.CONFIG.maxWoodSize) {
             BlockPos woodPos = pending.remove();
             var woodBlock = world.getBlockState(woodPos).getBlock();
             if (player.interactionManager.tryBreakBlock(woodPos)) {
@@ -39,10 +39,11 @@ public class WoodDrill extends DrillBase {
                     if (blocksMatch(newBlock, woodBlock) && !pending.contains(newPos)) {
                         pending.add(newPos);
                     }
-                });
+                }, true);
             }
         }
 
+        _log("processed = " + processed);
         return true;
     }
 

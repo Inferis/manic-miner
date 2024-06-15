@@ -4,4 +4,6 @@ public class ManicMinerConfig {
     public boolean mustSneak = true;
     public boolean allowCommonBlocks = true;
     public int maxVeinSize = 64;
+    public int maxCommonSize = 96;
+    public int maxWoodSize = 192;
 }

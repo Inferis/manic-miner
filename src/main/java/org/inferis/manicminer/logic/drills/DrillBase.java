@@ -43,6 +43,10 @@ public class DrillBase implements Drill {
     }
 
     protected void forXYZ(BlockPos pos, int max, ForXYZHandler handler) {
+        forXYZ(pos, max, handler, false);
+    }
+
+    protected void forXYZ(BlockPos pos, int max, ForXYZHandler handler, boolean forceVertical) {
         // Create the offsets for one axis.
         var offsets = new ArrayList<Integer>();
         for (var d = 0; d <= max; ++d) {
@@ -57,19 +61,24 @@ public class DrillBase implements Drill {
         // This will be mostly handy for the "common" path where we don't 
         // have actual veins to mine.
         var order = new String[] { "x", "y", "z" };
-        var majorPitchChange = player.getPitch() < -45.0 || player.getPitch() > 45.0; 
-        var majorYawChange = (player.getYaw() > 45.0 && player.getYaw() < 135.0) || (player.getYaw() < -45.0 && player.getYaw() > -135.0); 
-        if (majorPitchChange) {
-            if (majorYawChange) {
-                order = new String[] { "y", "z", "x" };
-            }
-            else {
-                order = new String[] { "y", "x", "z" };
-            }
+        if (forceVertical) {
+            order = new String[] { "y", "x", "z" };
         }
         else {
-            if (majorYawChange) {
-                order = new String[] { "z", "y", "x" };
+            var majorPitchChange = player.getPitch() < -45.0 || player.getPitch() > 45.0; 
+            var majorYawChange = (player.getYaw() > 45.0 && player.getYaw() < 135.0) || (player.getYaw() < -45.0 && player.getYaw() > -135.0); 
+            if (majorPitchChange) {
+                if (majorYawChange) {
+                    order = new String[] { "y", "z", "x" };
+                }
+                else {
+                    order = new String[] { "y", "x", "z" };
+                }
+            }
+            else {
+                if (majorYawChange) {
+                    order = new String[] { "z", "y", "x" };
+                }
             }
         }
 

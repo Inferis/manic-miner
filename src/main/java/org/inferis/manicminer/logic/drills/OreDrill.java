@@ -26,16 +26,20 @@ public class OreDrill extends DrillBase {
     @Override
     public boolean drill(BlockPos startPos) {
         var initialBlock = world.getBlockState(startPos).getBlock();
-        var processed = 0;
+        var processedOre = 0;
+        var processedCommon = 0;
         var pending = new ArrayDeque<BlockPos>();
         pending.add(startPos);
 
-        while (!pending.isEmpty() && processed < ManicMiner.CONFIG.maxVeinSize) {
+        while (!pending.isEmpty() && processedOre < ManicMiner.CONFIG.maxVeinSize && processedCommon < ManicMiner.CONFIG.maxCommonSize) {
             BlockPos orePos = pending.remove();
             var oreBlock = world.getBlockState(orePos).getBlock();
             if (player.interactionManager.tryBreakBlock(orePos)) {
                 if (oreBlock == initialBlock) {
-                    ++processed;
+                    ++processedOre;
+                }
+                else {
+                    ++processedCommon;
                 }
                 
                 if (oreBlock == initialBlock) {

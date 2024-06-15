@@ -15,7 +15,6 @@ public class ManicMinerEvents {
     private static ArrayList<ServerPlayerEntity> veinminingPlayers = new ArrayList<ServerPlayerEntity>();
 
     public static boolean beforeBlockBreak(World world, ServerPlayerEntity player, BlockPos pos, BlockState state) {
-        ManicMiner.LOGGER.info("client = " + world.isClient);
         if (world.isClient) {
             return true;
         }
