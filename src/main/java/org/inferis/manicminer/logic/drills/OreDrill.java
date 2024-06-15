@@ -1,5 +1,10 @@
 package org.inferis.manicminer.logic.drills;
 
+import org.inferis.manicminer.ManicMiner;
+
+import java.util.ArrayDeque;
+
+import net.minecraft.registry.Registries;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -19,9 +24,29 @@ public class OreDrill extends DrillBase {
     }
 
     @Override
-    public boolean drill(BlockPos blockPos) {
+    public boolean drill(BlockPos startPos) {
         _log("Ore");
-        player.interactionManager.tryBreakBlock(blockPos);
+        var initialBlock = world.getBlockState(startPos).getBlock();
+        var processed = 0;
+        var pending = new ArrayDeque<BlockPos>();
+        pending.add(startPos);
+
+        while (!pending.isEmpty() && processed < ManicMiner.CONFIG.maxVeinSize) {
+            BlockPos orePos = pending.remove();
+            var oreBlock = world.getBlockState(orePos).getBlock();
+            if (player.interactionManager.tryBreakBlock(orePos)) {
+                ++processed;
+                
+                // look around current block
+                forXYZ(orePos, 1, newPos -> {
+                    var block = world.getBlockState(newPos).getBlock();
+                    if (oreBlock == initialBlock && !pending.contains(newPos)) {
+                        pending.add(newPos);
+                    }
+                });
+            }
+        }
+
         return true;
     }
 

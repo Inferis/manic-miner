@@ -43,6 +43,7 @@ public class DrillBase implements Drill {
     }
 
     protected void forXYZ(BlockPos pos, int max, ForXYZHandler handler) {
+        // Create the offsets for one axis.
         var offsets = new ArrayList<Integer>();
         for (var d = 0; d <= max; ++d) {
             offsets.add(d);
@@ -51,11 +52,32 @@ public class DrillBase implements Drill {
             }
         }
 
+        // Change the order in which we will be processing blocks
+        // depending on where we are looking, so we can create a "tunnel" effect.
+        // This will be mostly handy for the "common" path where we don't 
+        // have actual veins to mine.
         var order = new String[] { "x", "y", "z" };
+        var majorPitchChange = player.getPitch() < -45.0 || player.getPitch() > 45.0; 
+        var majorYawChange = (player.getYaw() > 45.0 && player.getYaw() < 135.0) || (player.getYaw() < -45.0 && player.getYaw() > -135.0); 
+        if (majorPitchChange) {
+            if (majorYawChange) {
+                order = new String[] { "y", "z", "x" };
+            }
+            else {
+                order = new String[] { "y", "x", "z" };
+            }
+        }
+        else {
+            if (majorYawChange) {
+                order = new String[] { "z", "y", "x" };
+            }
+        }
+
+        // Generate positions based off the offsets generated,
+        // using the order we determined above.
         for (var i1: offsets) {
             for (var i2: offsets) {
                 for (var i3: offsets) {
-                    _log("offsets = " + i1 + " " + i2 + " " + i3);
                     var ix = order[0] == "x" ? i1 : order[1] == "x" ? i2 : i3;
                     var iy = order[0] == "y" ? i1 : order[1] == "y" ? i2 : i3;
                     var iz = order[0] == "z" ? i1 : order[1] == "z" ? i2 : i3;

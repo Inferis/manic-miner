@@ -2,6 +2,8 @@ package org.inferis.manicminer.logic.drills;
 
 import org.inferis.manicminer.ManicMiner;
 
+import java.util.ArrayDeque;
+
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -27,8 +29,31 @@ public class CommonDrill extends DrillBase {
     }
 
     @Override
-    public boolean drill(BlockPos blockPos) {
+    public boolean drill(BlockPos startPos) {
         _log("Common");
+        var initialBlock = world.getBlockState(startPos).getBlock();
+        var processed = 0;
+        var pending = new ArrayDeque<BlockPos>();
+        pending.add(startPos);
+
+        while (!pending.isEmpty() && processed < ManicMiner.CONFIG.maxVeinSize) {
+            BlockPos blockPos = pending.remove();
+            if (player.interactionManager.tryBreakBlock(blockPos)) {
+                ++processed;
+                
+                // look around current block
+                forXYZ(blockPos, 2, newPos -> {
+                    var block = world.getBlockState(newPos).getBlock();
+                    if (block == initialBlock && !pending.contains(newPos)) {
+                        var lookingDown = player.getPitch() > 33.0;
+                        if (lookingDown || newPos.getY() >= player.getBlockY()) {
+                            pending.add(newPos);
+                        } 
+                    }
+                });
+            }
+        }
+
         return true;
     }
     
