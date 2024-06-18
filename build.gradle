@@ -91,6 +91,12 @@ publishing {
 import com.modrinth.minotaur.dependencies.ModDependency
 
 modrinth {
+	var tokenFileName = ".modrinth_token";
+	File tokenFile = new File(tokenFileName);
+	if (!tokenFile.exists()) {
+		return;		
+	}
+
 	BufferedReader br = new BufferedReader(new FileReader(".modrinth_token"));
     token = br.readLine(); 
 
