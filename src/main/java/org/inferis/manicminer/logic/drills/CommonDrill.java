@@ -26,7 +26,8 @@ public class CommonDrill extends DrillBase {
             blockId.equals("minecraft:hardened_clay") || blockId.equals("minecraft:stained_hardened_clay") ||
             blockId.equals("minecraft:sandstone") || blockId.equals("minecraft:sand") || 
             blockId.equals("minecraft:soulsand") || blockId.equals("minecraft:soulsoil") || 
-            blockId.equals("minecraft:dirt") || blockId.equals("minecraft:grass_block") || blockId.equals("minecraft:clay") ||
+            blockId.equals("minecraft:dirt") || blockId.equals("minecraft:grass_block") || 
+            blockId.equals("minecraft:clay") ||
             blockId.endsWith("ice")
         );
     }
@@ -69,8 +70,8 @@ public class CommonDrill extends DrillBase {
         var blockBId = Registries.BLOCK.getId(blockB).toString();
 
         return
-            (blockAId == "minecraft:dirt" && blockBId == "minecraft:grass_block") ||
-            (blockAId == "minecraft:grass_block" && blockBId == "minecraft:dirt");
+            (blockAId.equals("minecraft:dirt") && blockBId.equals("minecraft:grass_block")) ||
+            (blockAId.equals("minecraft:grass_block") && blockBId.equals("minecraft:dirt"));
     }
     
 }
