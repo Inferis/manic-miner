@@ -24,34 +24,56 @@ public class WoodDrill extends DrillBase {
     @Override
     public boolean drill(BlockPos startPos) {
         var processed = 0;
-        var pending = new ArrayDeque<BlockPos>();
-        pending.add(startPos);
+        var pendingLogs = new ArrayDeque<BlockPos>();
+        var logBlocks = new ArrayDeque<BlockPos>();
+        pendingLogs.add(startPos);
 
-        while (!pending.isEmpty() && processed < ManicMiner.CONFIG.maxWoodSize) {
-            BlockPos woodPos = pending.remove();
+        // have to get this id here while the actual block is still there (iso air)
+        var leavesBlockId = Registries.BLOCK.getId(world.getBlockState(startPos).getBlock()).toString().replace("_log", "_leaves");
+
+        while (!pendingLogs.isEmpty() && processed < ManicMiner.CONFIG.maxWoodSize) {
+            BlockPos woodPos = pendingLogs.remove();
             var woodBlock = world.getBlockState(woodPos).getBlock();
+            
             if (player.interactionManager.tryBreakBlock(woodPos)) {
-                ++processed;
+                logBlocks.add(woodPos);
+                processed += 1;
                 
                 // look around current block
                 forXYZ(woodPos, 1, newPos -> {
                     var newBlock = world.getBlockState(newPos).getBlock();
-                    if (blocksMatch(newBlock, woodBlock) && !pending.contains(newPos)) {
-                        pending.add(newPos);
+                    if (newBlock == woodBlock && !pendingLogs.contains(newPos)) {
+                        pendingLogs.add(newPos);
                     }
                 }, true);
             }
+        }
+
+        // second round, leaves
+        // The pending blocks are all air now, 
+        var pendingLeaves = logBlocks;
+        _log("leaves id = " + leavesBlockId);
+        while (!pendingLeaves.isEmpty() && processed < ManicMiner.CONFIG.maxWoodSize) {
+            // remove the immediately surrounding leaves around the log blocks
+            processed += forXYZ(pendingLeaves.remove(), 1, newPos -> {
+                int processedLeaves = 0;
+                var newBlock = world.getBlockState(newPos).getBlock();
+                var newBlockId = Registries.BLOCK.getId(newBlock).toString();
+                if (newBlockId.equals(leavesBlockId)) {
+                    if (player.interactionManager.tryBreakBlock(newPos)) {
+                        processedLeaves += 1;
+                    }
+                }
+                return processedLeaves;
+            }, true);
         }
 
         _log("processed = " + processed);
         return true;
     }
 
-    private boolean blocksMatch(Block blockA, Block blockB) {
-        var blockARoot = Registries.BLOCK.getId(blockA).toString().replace("_log", "").replace("_leaves", "");
-        var blockBRoot = Registries.BLOCK.getId(blockB).toString().replace("_log", "").replace("_leaves", "");
-
-        return blockARoot.equals(blockBRoot);
+    private boolean isLeaf(Block block) {
+        return Registries.BLOCK.getId(block).toString().endsWith("_leaves");
     }
     
 }

@@ -42,11 +42,29 @@ public class DrillBase implements Drill {
         public void handle(BlockPos pos);
     }
 
+    protected interface ForXYZCounter {
+        public int handle(BlockPos pos);
+    }
+
     protected void forXYZ(BlockPos pos, int max, ForXYZHandler handler) {
-        forXYZ(pos, max, handler, false);
+        forXYZ(pos, max, handlerPos -> { 
+            handler.handle(handlerPos); 
+            return 0; 
+        }, false);
+    }
+
+    protected int forXYZ(BlockPos pos, int max, ForXYZCounter handler) {
+        return forXYZ(pos, max, handler, false);
     }
 
     protected void forXYZ(BlockPos pos, int max, ForXYZHandler handler, boolean forceVertical) {
+        forXYZ(pos, max, handlerPos -> { 
+            handler.handle(handlerPos); 
+            return 0; 
+        }, forceVertical);
+    }
+
+    protected int forXYZ(BlockPos pos, int max, ForXYZCounter handler, boolean forceVertical) {
         // Create the offsets for one axis.
         var offsets = new ArrayList<Integer>();
         for (var d = 0; d <= max; ++d) {
@@ -84,6 +102,7 @@ public class DrillBase implements Drill {
 
         // Generate positions based off the offsets generated,
         // using the order we determined above.
+        int counter = 0;
         for (var i1: offsets) {
             for (var i2: offsets) {
                 for (var i3: offsets) {
@@ -95,10 +114,12 @@ public class DrillBase implements Drill {
                     var py = pos.getY() + iy;
                     var pz = pos.getZ() + iz;
         
-                    handler.handle(new BlockPos(px, py, pz));
+                    counter += handler.handle(new BlockPos(px, py, pz));
                 }
             }
         }
+
+        return counter;
     }
 
     protected void _log(String message) {
