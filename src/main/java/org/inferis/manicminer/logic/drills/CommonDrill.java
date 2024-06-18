@@ -28,6 +28,7 @@ public class CommonDrill extends DrillBase {
             blockId.equals("minecraft:soulsand") || blockId.equals("minecraft:soulsoil") || 
             blockId.equals("minecraft:dirt") || blockId.equals("minecraft:grass_block") || 
             blockId.equals("minecraft:clay") ||
+            blockId.equals("minecraft:dripstone_block") ||
             blockId.endsWith("ice")
         );
     }
@@ -35,6 +36,8 @@ public class CommonDrill extends DrillBase {
     @Override
     public boolean drill(BlockPos startPos) {
         var initialBlock = world.getBlockState(startPos).getBlock();
+        var initialBlockId = Registries.BLOCK.getId(initialBlock).toString();
+        var forceVertical = initialBlockId.equals("minecraft:dripstone_block"); // we want to mine up/down for dripstone
         var processed = 0;
         var pending = new ArrayDeque<BlockPos>();
         pending.add(startPos);
@@ -53,7 +56,7 @@ public class CommonDrill extends DrillBase {
                             pending.add(newPos);
                         } 
                     }
-                });
+                }, forceVertical);
             }
         }
 
