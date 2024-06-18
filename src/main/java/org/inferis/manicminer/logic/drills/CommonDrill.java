@@ -38,14 +38,14 @@ public class CommonDrill extends DrillBase {
         var initialBlock = world.getBlockState(startPos).getBlock();
         var initialBlockId = Registries.BLOCK.getId(initialBlock).toString();
         var forceVertical = initialBlockId.equals("minecraft:dripstone_block"); // we want to mine up/down for dripstone
-        var processed = 0;
+        var broken = 0;
         var pending = new ArrayDeque<BlockPos>();
         pending.add(startPos);
 
-        while (!pending.isEmpty() && processed < ManicMiner.CONFIG.maxCommonSize) {
+        while (!pending.isEmpty() && broken < ManicMiner.CONFIG.maxCommonSize) {
             BlockPos blockPos = pending.remove();
-            if (player.interactionManager.tryBreakBlock(blockPos)) {
-                ++processed;
+            if (tryBreakBlock(blockPos)) {
+                ++broken;
                 
                 // look around current block
                 forXYZ(blockPos, 2, newPos -> {

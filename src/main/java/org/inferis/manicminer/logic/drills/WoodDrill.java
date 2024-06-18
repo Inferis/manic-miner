@@ -23,7 +23,7 @@ public class WoodDrill extends DrillBase {
 
     @Override
     public boolean drill(BlockPos startPos) {
-        var processed = 0;
+        var broken = 0;
         var pendingLogs = new ArrayDeque<BlockPos>();
         var logBlocks = new ArrayDeque<BlockPos>();
         pendingLogs.add(startPos);
@@ -31,13 +31,13 @@ public class WoodDrill extends DrillBase {
         // have to get this id here while the actual block is still there (iso air)
         var leavesBlockId = Registries.BLOCK.getId(world.getBlockState(startPos).getBlock()).toString().replace("_log", "_leaves");
 
-        while (!pendingLogs.isEmpty() && processed < ManicMiner.CONFIG.maxWoodSize) {
+        while (!pendingLogs.isEmpty() && broken < ManicMiner.CONFIG.maxWoodSize) {
             BlockPos woodPos = pendingLogs.remove();
             var woodBlock = world.getBlockState(woodPos).getBlock();
             
-            if (player.interactionManager.tryBreakBlock(woodPos)) {
+            if (tryBreakBlock(woodPos)) {
                 logBlocks.add(woodPos);
-                processed += 1;
+                broken += 1;
                 
                 // look around current block
                 forXYZ(woodPos, 1, newPos -> {
@@ -52,23 +52,21 @@ public class WoodDrill extends DrillBase {
         // second round, leaves
         // The pending blocks are all air now, 
         var pendingLeaves = logBlocks;
-        _log("leaves id = " + leavesBlockId);
-        while (!pendingLeaves.isEmpty() && processed < ManicMiner.CONFIG.maxWoodSize) {
+        while (!pendingLeaves.isEmpty() && broken < ManicMiner.CONFIG.maxWoodSize) {
             // remove the immediately surrounding leaves around the log blocks
-            processed += forXYZ(pendingLeaves.remove(), 1, newPos -> {
-                int processedLeaves = 0;
+            broken += forXYZ(pendingLeaves.remove(), 1, newPos -> {
+                int brokenLeaves = 0;
                 var newBlock = world.getBlockState(newPos).getBlock();
                 var newBlockId = Registries.BLOCK.getId(newBlock).toString();
                 if (newBlockId.equals(leavesBlockId)) {
-                    if (player.interactionManager.tryBreakBlock(newPos)) {
-                        processedLeaves += 1;
+                    if (tryBreakBlock(newPos)) {
+                        brokenLeaves += 1;
                     }
                 }
-                return processedLeaves;
+                return brokenLeaves;
             }, true);
         }
 
-        _log("processed = " + processed);
         return true;
     }
 

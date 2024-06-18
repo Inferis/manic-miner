@@ -122,6 +122,11 @@ public class DrillBase implements Drill {
         return counter;
     }
 
+    protected boolean tryBreakBlock(BlockPos blockPos) {
+        // we need a tool in order to break a block, so check always
+        return isRightTool(blockPos) && player.interactionManager.tryBreakBlock(blockPos);
+    }
+
     protected void _log(String message) {
         PlainTextContent literal = new PlainTextContent.Literal(message);
         Text text = MutableText.of(literal);
