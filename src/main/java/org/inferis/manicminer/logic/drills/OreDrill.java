@@ -1,6 +1,7 @@
 package org.inferis.manicminer.logic.drills;
 
 import org.inferis.manicminer.ManicMiner;
+import org.inferis.manicminer.ManicMinerConfig;
 
 import java.util.ArrayDeque;
 
@@ -47,7 +48,9 @@ public class OreDrill extends DrillBase {
                     forXYZ(orePos, 1, newPos -> {
                         var newBlock = world.getBlockState(newPos).getBlock();
                         var newBlockId = Registries.BLOCK.getId(newBlock).toString();
-                        if (!pending.contains(newPos) && (!canHandle(newBlockId) || newBlock == oreBlock)) {
+                        var isSameOreBlock = newBlock == oreBlock;
+                        var isNonOreBlock = !canHandle(newBlockId) && ManicMiner.CONFIG.removeCommonBlocksAroundOre;
+                        if (!pending.contains(newPos) && (isSameOreBlock || isNonOreBlock)) {
                             pending.add(newPos);
                         }
                     });
