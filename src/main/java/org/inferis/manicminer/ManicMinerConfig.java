@@ -6,8 +6,5 @@ public class ManicMinerConfig {
     public boolean removeCommonBlocksAroundOre = true;
     public int maxVeinSize = 128; // 2 stacks
     public int maxCommonSize = 128; // 2 stacks
-    public int maxWoodSize = 192;  
-
-
-
+    public int maxWoodSize = 192;
 }

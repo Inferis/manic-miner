@@ -20,6 +20,9 @@
 		],
 		"client": [
 			"org.inferis.manicminer.ManicMinerClient"
+		],
+		"modmenu": [
+			"org.inferis.manicminer.ManicMinerModMenuIntegration"
 		]
 	},
 	"mixins": [

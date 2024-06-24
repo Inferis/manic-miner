@@ -1,7 +1,6 @@
 package org.inferis.manicminer.logic.drills;
 
 import org.inferis.manicminer.ManicMiner;
-import org.inferis.manicminer.ManicMinerConfig;
 
 import java.util.ArrayDeque;
 
