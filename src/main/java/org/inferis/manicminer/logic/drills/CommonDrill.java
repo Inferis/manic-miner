@@ -29,6 +29,7 @@ public class CommonDrill extends DrillBase {
             blockId.equals("minecraft:dirt") || blockId.equals("minecraft:grass_block") || 
             blockId.equals("minecraft:clay") ||
             blockId.equals("minecraft:dripstone_block") ||
+            blockId.endsWith("_leaves") ||
             blockId.endsWith("ice")
         );
     }
