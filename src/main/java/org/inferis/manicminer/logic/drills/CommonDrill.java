@@ -26,7 +26,7 @@ public class CommonDrill extends DrillBase {
             blockId.equals("minecraft:hardened_clay") || blockId.equals("minecraft:stained_hardened_clay") ||
             blockId.equals("minecraft:sandstone") || blockId.equals("minecraft:sand") || 
             blockId.equals("minecraft:soulsand") || blockId.equals("minecraft:soulsoil") || 
-            blockId.equals("minecraft:dirt") || blockId.equals("minecraft:grass_block") || 
+            blockId.equals("minecraft:dirt") || blockId.equals("minecraft:grass_block") || blockId.equals("minecraft:dirt_path") || 
             blockId.equals("minecraft:clay") ||
             blockId.equals("minecraft:dripstone_block") ||
             blockId.endsWith("_leaves") ||
@@ -73,9 +73,10 @@ public class CommonDrill extends DrillBase {
         var blockAId = Registries.BLOCK.getId(blockA).toString();
         var blockBId = Registries.BLOCK.getId(blockB).toString();
 
-        return
-            (blockAId.equals("minecraft:dirt") && blockBId.equals("minecraft:grass_block")) ||
-            (blockAId.equals("minecraft:grass_block") && blockBId.equals("minecraft:dirt"));
+        var isBlockADirt = blockAId.equals("minecraft:dirt") || blockAId.equals("minecraft:grass_block") || blockAId.equals("minecraft:dirt_path");
+        var isBlockBDirt = blockBId.equals("minecraft:dirt") || blockBId.equals("minecraft:grass_block") || blockBId.equals("minecraft:dirt_path");
+
+        return isBlockADirt && isBlockBDirt;
     }
     
 }
