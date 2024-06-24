@@ -3,13 +3,14 @@
 	"id": "manic-miner",
 	"version": "${version}",
 	"name": "Manic Miner",
-	"description": "Vein Mining On Steroids.",
+	"description": "This is a (server side) vein miner mod. To activate, sneak and mine. No special enchantment needed. Supports 3 modes: ore veins, common blocks and trees.",
 	"authors": [
 		"Inferis"
 	],
 	"contact": {
-		"homepage": "https://fabricmc.net/",
-		"sources": "https://github.com/FabricMC/fabric-example-mod"
+		"homepage": "https://modrinth.com/project/manic-miner",
+		"issues": "https://github.com/Inferis/manic-miner/issues",
+		"sources": "https://github.com/Inferis/manic-miner"
 	},
 	"license": "MIT",
 	"icon": "assets/manic-miner/icon.png",
