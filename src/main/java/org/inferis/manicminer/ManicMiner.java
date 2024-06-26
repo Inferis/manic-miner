@@ -16,7 +16,7 @@ public class ManicMiner implements ModInitializer {
 
 	@Override
 	public void onInitialize() {
-		ManicMiner.CONFIG.load();
+		ManicMiner.CONFIG.initialLoad();
 
 		PlayerBlockBreakEvents.BEFORE.register((world, player, pos, state, blockEntity) -> {
 			if (player instanceof ServerPlayerEntity serverPlayer) {

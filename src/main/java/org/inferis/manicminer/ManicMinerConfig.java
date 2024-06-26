@@ -33,10 +33,10 @@ public class ManicMinerConfig {
         }
     }
 
-    public void load() {
+    public boolean load() {
         var file = new File(CONFIG_FILE);
         if (!file.exists()) {
-            return;
+            return false;
         }
 
         try {
@@ -50,6 +50,7 @@ public class ManicMinerConfig {
             maxVeinSize = loadedConfig.maxVeinSize;
             maxCommonSize = loadedConfig.maxCommonSize;
             maxWoodSize = loadedConfig.maxWoodSize;
+            return true;
         }
         catch (FileNotFoundException e) {
             ManicMiner.LOGGER.error("Could not open config", e);
@@ -59,6 +60,15 @@ public class ManicMinerConfig {
         }
         catch (JsonSyntaxException e) {
             ManicMiner.LOGGER.error("Could not read config, syntax error", e);
+        }
+        return false;
+    }
+
+    public void initialLoad() {
+        // if we didn't load, no file (or a corrupt one) is present, so save
+        // our defaults.
+        if (!load()) {
+            save();
         }
     }
 }
