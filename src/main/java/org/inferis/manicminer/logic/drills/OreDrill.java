@@ -1,18 +1,17 @@
 package org.inferis.manicminer.logic.drills;
 
 import org.inferis.manicminer.ManicMiner;
+import org.inferis.manicminer.logic.VeinMinerSession;
 
 import java.util.ArrayDeque;
 
 import net.minecraft.registry.Registries;
-import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 
 public class OreDrill extends DrillBase {
 
-    public OreDrill(World world, ServerPlayerEntity player) {
-        super(world, player);
+    public OreDrill(VeinMinerSession session) {
+        super(session);
     }
 
     @Override
@@ -25,6 +24,7 @@ public class OreDrill extends DrillBase {
 
     @Override
     public boolean drill(BlockPos startPos) {
+        var world = session.world;
         var initialBlock = world.getBlockState(startPos).getBlock();
         var brokenOre = 0;
         var brokenCommon = 0;

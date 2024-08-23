@@ -2,33 +2,32 @@ package org.inferis.manicminer.events;
 
 import org.inferis.manicminer.ManicMiner;
 import org.inferis.manicminer.logic.Drill;
+import org.inferis.manicminer.logic.VeinMinerSession;
 import org.inferis.manicminer.logic.drills.*;
-import java.util.ArrayList;
-
 import net.minecraft.block.BlockState;
+import net.minecraft.entity.Entity;
 import net.minecraft.registry.Registries;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 public class ManicMinerEvents {
-    private static ArrayList<ServerPlayerEntity> veinminingPlayers = new ArrayList<ServerPlayerEntity>();
-
     public static boolean beforeBlockBreak(World world, ServerPlayerEntity player, BlockPos pos, BlockState state) {
         if (world.isClient) {
             return true;
         }
 
         // tryBlockBreak will recurse into this, so we want to avoid calling this for the subsequent mined blocks.
-        var isVeinMining = veinminingPlayers.contains(player);
+        var isVeinMining = VeinMinerSession.sessionForPlayer(player) != null;
         var isRightPose = true;
         if (ManicMiner.CONFIG.mustSneak) {
             isRightPose = player.isInSneakingPose();
         }
         if (isRightPose && !isVeinMining) {
-            veinminingPlayers.add(player);
-            var shouldContinue = !mine(world, player, pos);
-            veinminingPlayers.remove(player);
+            var session = VeinMinerSession.start(player, (ServerWorld)world, pos);
+            var shouldContinue = !mine(session);
+            session.finish();
             return shouldContinue;
         }
         else {
@@ -36,18 +35,26 @@ public class ManicMinerEvents {
         }
     }    
 
-    public static void afterBlockBreak(World world, ServerPlayerEntity player, BlockPos pos, BlockState state) {
-    }    
+    public static void onEntityLoad(Entity entity, ServerWorld world) {
+        if (ManicMiner.CONFIG.summonItems) {
+            var pos = entity.getBlockPos();
+            var session = VeinMinerSession.sessionForPosition(pos);
+            if (session != null) {
+                entity.setPos(session.initialPos.getX(), session.initialPos.getY(), session.initialPos.getZ());
+            }
+        }
+    }
 
-    private static boolean mine(World world, ServerPlayerEntity player, BlockPos pos) {
+    private static boolean mine(VeinMinerSession session) {
         // Check ores first, than wood, than ice and than the common blocks (stone etc).
         var drills = new Drill[] {
-            new OreDrill(world, player),
-            new WoodDrill(world, player),
-            new CommonDrill(world, player)
+            new OreDrill(session),
+            new WoodDrill(session),
+            new CommonDrill(session)
         };
 
-        var blockState = world.getBlockState(pos);
+        var pos = session.initialPos;
+        var blockState = session.world.getBlockState(pos);
         var blockId = Registries.BLOCK.getId(blockState.getBlock()).toString();
         for (var drill: drills) {
             if (drill.canHandle(blockId) && drill.isRightTool(pos)) {

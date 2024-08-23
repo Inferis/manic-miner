@@ -21,7 +21,8 @@ public class ManicMinerConfig {
     public int maxVeinSize = 128; // 2 stacks
     public int maxCommonSize = 128; // 2 stacks
     public int maxWoodSize = 192;
-
+    public boolean summonItems = true;
+    
     public void save() {
         var file = new File(CONFIG_FILE);
         try {

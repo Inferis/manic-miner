@@ -1,8 +1,14 @@
 package org.inferis.manicminer;
 
 import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerEntityEvents;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerWorldEvents;
 import net.fabricmc.fabric.api.event.player.PlayerBlockBreakEvents;
+import net.minecraft.entity.Entity;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.world.ServerWorld;
+import net.minecraft.world.WorldEvents;
 
 import org.inferis.manicminer.events.ManicMinerEvents;
 
@@ -27,10 +33,8 @@ public class ManicMiner implements ModInitializer {
 			}
 		});
 
-		PlayerBlockBreakEvents.AFTER.register((world, player, pos, state, blockEntity) -> {
-			if (player instanceof ServerPlayerEntity serverPlayer) {
-				ManicMinerEvents.afterBlockBreak(world, serverPlayer, pos, state);
-			}
+		ServerEntityEvents.ENTITY_LOAD.register((Entity entity, ServerWorld world) -> {
+			ManicMinerEvents.onEntityLoad(entity, world);
 		});
 	}
 }

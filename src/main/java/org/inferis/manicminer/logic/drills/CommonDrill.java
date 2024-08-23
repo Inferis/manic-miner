@@ -1,19 +1,22 @@
 package org.inferis.manicminer.logic.drills;
 
 import org.inferis.manicminer.ManicMiner;
+import org.inferis.manicminer.logic.VeinMinerSession;
 
 import java.util.ArrayDeque;
 
 import net.minecraft.block.Block;
+import net.minecraft.loot.context.LootContextParameterSet;
+import net.minecraft.loot.context.LootContextParameters;
 import net.minecraft.registry.Registries;
-import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.util.math.Vec3d;
 
 public class CommonDrill extends DrillBase {
 
-    public CommonDrill(World world, ServerPlayerEntity player) {
-        super(world, player);
+    public CommonDrill(VeinMinerSession session) {
+        super(session);
     }
 
     @Override
@@ -36,6 +39,8 @@ public class CommonDrill extends DrillBase {
 
     @Override
     public boolean drill(BlockPos startPos) {
+        var world = session.world;
+        var player = session.player;
         var initialBlock = world.getBlockState(startPos).getBlock();
         var initialBlockId = Registries.BLOCK.getId(initialBlock).toString();
         var forceVertical = initialBlockId.equals("minecraft:dripstone_block"); // we want to mine up/down for dripstone
@@ -45,8 +50,16 @@ public class CommonDrill extends DrillBase {
 
         while (!pending.isEmpty() && broken < ManicMiner.CONFIG.maxCommonSize) {
             BlockPos blockPos = pending.remove();
+            var blockState = world.getBlockState(blockPos);
             if (tryBreakBlock(blockPos)) {
                 ++broken;
+                // if (!world.isClient) {
+                //     var builder = new LootContextParameterSet.Builder((ServerWorld)world)
+                //         .add(LootContextParameters.TOOL, player.getMainHandStack())
+                //         .add(LootContextParameters.ORIGIN, new Vec3d(blockPos.getX(), blockPos.getY(), blockPos.getZ()));
+                //     var itemStacks = blockState.getDroppedStacks(builder);
+
+                // }
                 
                 // look around current block
                 forXYZ(blockPos, 2, newPos -> {

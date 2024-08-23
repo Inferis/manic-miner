@@ -10,9 +10,7 @@ import net.minecraft.text.Text;
 public class ManicMinerModMenuIntegration implements ModMenuApi {
     @Override
     public ConfigScreenFactory<?> getModConfigScreenFactory() {
-        return parent -> {
-            return configScreen(parent);
-        };
+        return parent -> configScreen(parent);
     }
 
     public Screen configScreen(Screen parentScreen) {
@@ -38,6 +36,11 @@ public class ManicMinerModMenuIntegration implements ModMenuApi {
                 .setDefaultValue(true)
                 .setTooltip(Text.translatable("manicminer.config.remove_common_around_ore.tooltip"))
                 .setSaveConsumer(value -> { ManicMiner.CONFIG.removeCommonBlocksAroundOre = value; ManicMiner.CONFIG.save(); })
+                .build())
+            .addEntry(entryBuilder.startBooleanToggle(Text.translatable("manicminer.config.summon_items"), ManicMiner.CONFIG.summonItems)
+                .setDefaultValue(false)
+                .setTooltip(Text.translatable("manicminer.config.summon_items.tooltip"))
+                .setSaveConsumer(value -> { ManicMiner.CONFIG.summonItems = value; ManicMiner.CONFIG.save(); })
                 .build());
 
         category

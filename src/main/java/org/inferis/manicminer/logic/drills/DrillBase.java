@@ -1,24 +1,21 @@
 package org.inferis.manicminer.logic.drills;
 
 import org.inferis.manicminer.logic.Drill;
+import org.inferis.manicminer.logic.VeinMinerSession;
 import org.inferis.manicminer.ManicMiner;
 
 import java.util.ArrayList;
 
-import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.PlainTextContent;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 
 public class DrillBase implements Drill {
-    protected World world;
-    protected ServerPlayerEntity player;
+    protected VeinMinerSession session;
 
-    public DrillBase(World world, ServerPlayerEntity player) {
-        this.world = world;
-        this.player = player;
+    public DrillBase(VeinMinerSession session) {
+        this.session = session;
     }
 
     @Override
@@ -34,8 +31,8 @@ public class DrillBase implements Drill {
 
     @Override
     public boolean isRightTool(BlockPos pos) {
-        var blockState = world.getBlockState(pos);
-        return player.getMainHandStack().isSuitableFor(blockState);
+        var blockState = session.world.getBlockState(pos);
+        return session.player.getMainHandStack().isSuitableFor(blockState);
     }
 
     protected interface ForXYZHandler {
@@ -83,6 +80,7 @@ public class DrillBase implements Drill {
             order = new String[] { "y", "x", "z" };
         }
         else {
+            var player = session.player;
             var majorPitchChange = player.getPitch() < -45.0 || player.getPitch() > 45.0; 
             var majorYawChange = (player.getYaw() > 45.0 && player.getYaw() < 135.0) || (player.getYaw() < -45.0 && player.getYaw() > -135.0); 
             if (majorPitchChange) {
@@ -124,13 +122,18 @@ public class DrillBase implements Drill {
 
     protected boolean tryBreakBlock(BlockPos blockPos) {
         // we need a tool in order to break a block, so check always
-        return isRightTool(blockPos) && player.interactionManager.tryBreakBlock(blockPos);
+        session.addPosition(blockPos);
+        var success = isRightTool(blockPos) && session.player.interactionManager.tryBreakBlock(blockPos);
+        if (!success) {
+            session.removePosition(blockPos);
+        }
+        return success;
     }
 
     protected void _log(String message) {
         PlainTextContent literal = new PlainTextContent.Literal(message);
         Text text = MutableText.of(literal);
-        player.sendMessage(text);
+        session.player.sendMessage(text);
         ManicMiner.LOGGER.info(message);
     }
 }
