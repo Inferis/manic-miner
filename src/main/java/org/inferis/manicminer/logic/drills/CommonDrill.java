@@ -6,12 +6,8 @@ import org.inferis.manicminer.logic.VeinMinerSession;
 import java.util.ArrayDeque;
 
 import net.minecraft.block.Block;
-import net.minecraft.loot.context.LootContextParameterSet;
-import net.minecraft.loot.context.LootContextParameters;
 import net.minecraft.registry.Registries;
-import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
 
 public class CommonDrill extends DrillBase {
 
