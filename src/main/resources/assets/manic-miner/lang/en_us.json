@@ -14,5 +14,6 @@
     "manicminer.config.commonlimit": "Common block limit",
     "manicminer.config.commonlimit.tooltip": "Number of (same type) common blocks mined in \"tunnel\" mode. This also applies to the surrounding blocks when mining an ore vein.",
     "manicminer.config.woodlimit": "Tree (logs) limit",
-    "manicminer.config.woodlimit.tooltip": "Number of (same type) tree logs mined when vein mining a tree."
+    "manicminer.config.woodlimit.tooltip": "Number of (same type) tree logs mined when vein mining a tree.",
+    "manicminer.enchantment.manic_mining": "Manic Mining"
 }

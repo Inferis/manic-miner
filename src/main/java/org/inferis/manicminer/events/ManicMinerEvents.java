@@ -20,11 +20,24 @@ public class ManicMinerEvents {
 
         // tryBlockBreak will recurse into this, so we want to avoid calling this for the subsequent mined blocks.
         var isVeinMining = VeinMinerSession.sessionForPlayer(player) != null;
-        var isRightPose = true;
+        var canVeinMine = true;
         if (ManicMiner.CONFIG.mustSneak) {
-            isRightPose = player.isInSneakingPose();
+            canVeinMine = canVeinMine && player.isInSneakingPose();
         }
-        if (isRightPose && !isVeinMining) {
+        if (ManicMiner.CONFIG.requireEnchantment) {
+            var hasEnchantment = false;
+            for (var enchantmentEntry: player.getMainHandStack().getEnchantments().getEnchantments()) {
+                ManicMiner.LOGGER.info(enchantmentEntry.getIdAsString());
+                if (enchantmentEntry.getIdAsString().equalsIgnoreCase("manicminer:manic_mining")) {
+                    hasEnchantment = true;
+                    break;
+                }
+            }
+            ManicMiner.LOGGER.info("has enchantment " + hasEnchantment);
+            canVeinMine = canVeinMine && hasEnchantment;
+        }
+        ManicMiner.LOGGER.info("can vein mine " + canVeinMine);
+        if (canVeinMine && !isVeinMining) {
             var session = VeinMinerSession.start(player, (ServerWorld)world, pos);
             var shouldContinue = !mine(session);
             session.finish();
