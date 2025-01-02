@@ -27,16 +27,13 @@ public class ManicMinerEvents {
         if (ManicMiner.CONFIG.requireEnchantment) {
             var hasEnchantment = false;
             for (var enchantmentEntry: player.getMainHandStack().getEnchantments().getEnchantments()) {
-                ManicMiner.LOGGER.info(enchantmentEntry.getIdAsString());
                 if (enchantmentEntry.getIdAsString().equalsIgnoreCase("manicminer:manic_mining")) {
                     hasEnchantment = true;
                     break;
                 }
             }
-            ManicMiner.LOGGER.info("has enchantment " + hasEnchantment);
             canVeinMine = canVeinMine && hasEnchantment;
         }
-        ManicMiner.LOGGER.info("can vein mine " + canVeinMine);
         if (canVeinMine && !isVeinMining) {
             var session = VeinMinerSession.start(player, (ServerWorld)world, pos);
             var shouldContinue = !mine(session);
