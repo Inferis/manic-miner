@@ -4,6 +4,7 @@ import org.inferis.manicminer.ManicMiner;
 import org.inferis.manicminer.logic.Drill;
 import org.inferis.manicminer.logic.VeinMinerSession;
 import org.inferis.manicminer.logic.drills.*;
+
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.registry.Registries;
@@ -23,6 +24,9 @@ public class ManicMinerEvents {
         var canVeinMine = true;
         if (ManicMiner.CONFIG.mustSneak) {
             canVeinMine = canVeinMine && player.isInSneakingPose();
+        }
+        if (ManicMiner.CONFIG.requiresHotKey) {
+            canVeinMine = canVeinMine && ManicMiner.IS_HOTKEY_PRESSED;
         }
         if (ManicMiner.CONFIG.requireEnchantment) {
             var hasEnchantment = false;

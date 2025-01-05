@@ -1,5 +1,7 @@
 {
     "manicminer.config.title": "Manic Miner",
+    "manicminer.config.requires_hotkey": "Requires hotkey to activate vein mining",
+    "manicminer.config.requires_hotkey.tooltip": "Whether the hotkey (defaults to V) needs to be pressed in order to vein mine.",
     "manicminer.config.must_sneak": "Must sneak to activate vein mining",
     "manicminer.config.must_sneak.tooltip": "Whether the player must be sneaking to be able to vein mine.\nWarning: if you turn this off, all mining operations will be vein mining!",
     "manicminer.config.allow_common": "Allow vein mining of common blocks (tunnel mode)",
@@ -15,5 +17,7 @@
     "manicminer.config.commonlimit.tooltip": "Number of (same type) common blocks mined in \"tunnel\" mode. This also applies to the surrounding blocks when mining an ore vein.",
     "manicminer.config.woodlimit": "Tree (logs) limit",
     "manicminer.config.woodlimit.tooltip": "Number of (same type) tree logs mined when vein mining a tree.",
-    "manicminer.enchantment.manic_mining": "Manic Mining"
+    "manicminer.enchantment.manic_mining": "Manic Mining",
+    "manicminer.category.keys": "Manic Miner",
+    "manicminer.key.hotkey_pressed": "Vein mining hotkey"
 }

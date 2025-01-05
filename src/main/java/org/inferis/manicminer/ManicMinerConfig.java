@@ -16,6 +16,7 @@ public class ManicMinerConfig {
 	private static final String CONFIG_FILE = FabricLoader.getInstance().getConfigDir().resolve("manicminer.cfg").toString();
 
     public boolean mustSneak = true;
+    public boolean requiresHotKey = false;
     public boolean allowCommonBlocks = true;
     public boolean removeCommonBlocksAroundOre = true;
     public boolean requireEnchantment = false;
@@ -47,6 +48,7 @@ public class ManicMinerConfig {
             var loadedConfig = gson.fromJson(json, ManicMinerConfig.class);
 
             mustSneak = loadedConfig.mustSneak;
+            requiresHotKey = loadedConfig.requiresHotKey;
             allowCommonBlocks = loadedConfig.allowCommonBlocks;
             removeCommonBlocksAroundOre = loadedConfig.removeCommonBlocksAroundOre;
             requireEnchantment = loadedConfig.requireEnchantment;

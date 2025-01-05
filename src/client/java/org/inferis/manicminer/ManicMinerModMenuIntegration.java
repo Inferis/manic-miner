@@ -5,6 +5,7 @@ import com.terraformersmc.modmenu.api.ModMenuApi;
 
 import me.shedaniel.clothconfig2.api.ConfigBuilder;
 import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.util.InputUtil;
 import net.minecraft.text.Text;
 
 public class ManicMinerModMenuIntegration implements ModMenuApi {
@@ -26,6 +27,11 @@ public class ManicMinerModMenuIntegration implements ModMenuApi {
                 .setDefaultValue(true)
                 .setTooltip(Text.translatable("manicminer.config.must_sneak.tooltip"))
                 .setSaveConsumer(value -> { ManicMiner.CONFIG.mustSneak = value; ManicMiner.CONFIG.save(); })
+                .build())
+            .addEntry(entryBuilder.startBooleanToggle(Text.translatable("manicminer.config.requires_hotkey"), ManicMiner.CONFIG.requiresHotKey)
+                .setDefaultValue(false)
+                .setTooltip(Text.translatable("manicminer.config.requires_hotkey.tooltip"))
+                .setSaveConsumer(value -> { ManicMiner.CONFIG.requiresHotKey = value; ManicMiner.CONFIG.save(); })
                 .build())
             .addEntry(entryBuilder.startBooleanToggle(Text.translatable("manicminer.config.allow_common"), ManicMiner.CONFIG.allowCommonBlocks)
                 .setDefaultValue(true)
