@@ -1,9 +1,11 @@
 {
     "manicminer.config.title": "Manic Miner",
-    "manicminer.config.requires_hotkey": "Requires hotkey to activate vein mining",
-    "manicminer.config.requires_hotkey.tooltip": "Whether the hotkey (defaults to V) needs to be pressed in order to vein mine.",
     "manicminer.config.must_sneak": "Must sneak to activate vein mining",
     "manicminer.config.must_sneak.tooltip": "Whether the player must be sneaking to be able to vein mine.\nWarning: if you turn this off, all mining operations will be vein mining!",
+    "manicminer.config.requires_hotkey": "Requires hotkey to activate vein mining",
+    "manicminer.config.requires_hotkey.tooltip": "Whether the hotkey (defaults to V) needs to be pressed in order to vein mine.",
+    "manicminer.config.requires_enchantment": "Require 'Manic Mining' enchantment",
+    "manicminer.config.requires_enchantment.tooltip": "Whether the tool the player is using needs the 'Manic Mining' enchantment.",
     "manicminer.config.allow_common": "Allow vein mining of common blocks (tunnel mode)",
     "manicminer.config.allow_common.tooltip": "Whether tunnel mode is active.\nThis allows you to vein mine a set of common blocks (e.g. stone),\nwhich will be mined out in a straight line in front of you (like a tunnel).",
     "manicminer.config.remove_common_around_ore": "Remove common blocks around ore veins",
