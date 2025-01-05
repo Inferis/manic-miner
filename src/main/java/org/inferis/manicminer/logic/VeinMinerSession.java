@@ -19,7 +19,6 @@ public class VeinMinerSession {
     public ServerWorld world;
     public Set<BlockPos> positions;
     public BlockPos initialPos;
-    private ArrayList<Entity> entities;
 
     public static VeinMinerSession sessionForPlayer(ServerPlayerEntity player) {
         for (var session: sessions) {
@@ -55,7 +54,6 @@ public class VeinMinerSession {
         this.initialPos = initialPos;
         this.positions = new HashSet<>();
         positions.add(initialPos);
-        this.entities = new ArrayList<>();
     }
 
     public void addPosition(BlockPos pos) {
