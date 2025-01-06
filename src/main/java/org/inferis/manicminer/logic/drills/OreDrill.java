@@ -1,5 +1,10 @@
 package org.inferis.manicminer.logic.drills;
 
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.registry.RegistryKeys;
+import net.minecraft.registry.tag.TagKey;
+import net.minecraft.util.Identifier;
 import org.inferis.manicminer.ManicMiner;
 import org.inferis.manicminer.logic.VeinMinerSession;
 
@@ -14,12 +19,11 @@ public class OreDrill extends DrillBase {
         super(session);
     }
 
+    public static final TagKey<Block> oreTag = TagKey.of(RegistryKeys.BLOCK, Identifier.of("manicminer", "ore"));
+
     @Override
-    public boolean canHandle(String blockId) {
-        return 
-            blockId.endsWith("_ore") ||
-            blockId == "minecraft:ancient_debris" ||
-            blockId == "minecraft:magma";
+    public boolean canHandle(BlockState blockState) {
+        return blockState.isIn(oreTag);
     }
 
     @Override
@@ -45,10 +49,10 @@ public class OreDrill extends DrillBase {
                 if (oreBlock == initialBlock) {
                     // look around current block
                     forXYZ(orePos, 1, newPos -> {
-                        var newBlock = world.getBlockState(newPos).getBlock();
-                        var newBlockId = Registries.BLOCK.getId(newBlock).toString();
+                        var newBlockState = world.getBlockState(newPos);
+                        var newBlock = newBlockState.getBlock();
                         var isSameOreBlock = newBlock == oreBlock;
-                        var isNonOreBlock = !canHandle(newBlockId) && ManicMiner.CONFIG.removeCommonBlocksAroundOre;
+                        var isNonOreBlock = !canHandle(newBlockState) && ManicMiner.CONFIG.removeCommonBlocksAroundOre;
                         if (!pending.contains(newPos) && (isSameOreBlock || isNonOreBlock)) {
                             pending.add(newPos);
                         }

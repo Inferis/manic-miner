@@ -1,5 +1,6 @@
 package org.inferis.manicminer.logic.drills;
 
+import net.minecraft.block.BlockState;
 import org.inferis.manicminer.logic.Drill;
 import org.inferis.manicminer.logic.VeinMinerSession;
 import org.inferis.manicminer.ManicMiner;
@@ -19,8 +20,7 @@ public class DrillBase implements Drill {
     }
 
     @Override
-    public boolean canHandle(String blockId) {
-
+    public boolean canHandle(BlockState blockId) {
         return false;
     }
 
