@@ -1,5 +1,9 @@
 package org.inferis.manicminer.logic.drills;
 
+import net.minecraft.block.BlockState;
+import net.minecraft.registry.RegistryKeys;
+import net.minecraft.registry.tag.TagKey;
+import net.minecraft.util.Identifier;
 import org.inferis.manicminer.ManicMiner;
 import org.inferis.manicminer.logic.VeinMinerSession;
 
@@ -15,9 +19,11 @@ public class WoodDrill extends DrillBase {
         super(session);
     }
 
+    public static final TagKey<Block> woodTag = TagKey.of(RegistryKeys.BLOCK, Identifier.of("manicminer", "wood"));
+
     @Override
-    public boolean canHandle(String blockId) {
-        return blockId.endsWith("log") || blockId.endsWith("stem") || blockId.endsWith("leaves");
+    public boolean canHandle(BlockState blockState) {
+        return blockState.isIn(woodTag);
     }
 
     @Override

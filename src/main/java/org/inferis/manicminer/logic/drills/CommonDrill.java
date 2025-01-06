@@ -1,5 +1,9 @@
 package org.inferis.manicminer.logic.drills;
 
+import net.minecraft.block.BlockState;
+import net.minecraft.registry.RegistryKeys;
+import net.minecraft.registry.tag.TagKey;
+import net.minecraft.util.Identifier;
 import org.inferis.manicminer.ManicMiner;
 import org.inferis.manicminer.logic.VeinMinerSession;
 
@@ -10,27 +14,15 @@ import net.minecraft.registry.Registries;
 import net.minecraft.util.math.BlockPos;
 
 public class CommonDrill extends DrillBase {
-
     public CommonDrill(VeinMinerSession session) {
         super(session);
     }
 
+    public static final TagKey<Block> commonTag = TagKey.of(RegistryKeys.BLOCK, Identifier.of("manicminer", "common"));
+
     @Override
-    public boolean canHandle(String blockId) {
-        return ManicMiner.CONFIG.allowCommonBlocks && (
-            blockId.equals("minecraft:stone") || blockId.equals("minecraft:deepslate") ||
-            blockId.equals("minecraft:granite") || blockId.equals("minecraft:andesite") || blockId.equals("minecraft:diorite") ||
-            blockId.equals("minecraft:gravel") || blockId.equals("minecraft:tuff") ||
-            blockId.equals("minecraft:netherrack") || blockId.equals("minecraft:basalt") || blockId.equals("minecraft:blackstone") || 
-            blockId.equals("minecraft:hardened_clay") || blockId.equals("minecraft:stained_hardened_clay") ||
-            blockId.equals("minecraft:sandstone") || blockId.equals("minecraft:sand") || 
-            blockId.equals("minecraft:soulsand") || blockId.equals("minecraft:soulsoil") || 
-            blockId.equals("minecraft:dirt") || blockId.equals("minecraft:grass_block") || blockId.equals("minecraft:dirt_path") || 
-            blockId.equals("minecraft:clay") ||
-            blockId.equals("minecraft:dripstone_block") ||
-            blockId.endsWith("_leaves") ||
-            blockId.endsWith("ice")
-        );
+    public boolean canHandle(BlockState blockState) {
+        return ManicMiner.CONFIG.allowCommonBlocks && blockState.isIn(commonTag);
     }
 
     @Override
