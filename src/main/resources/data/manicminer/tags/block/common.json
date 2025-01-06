@@ -11,7 +11,7 @@
     "minecraft:basalt",
     "minecraft:blackstone",
     "minecraft:hardened_clay",
-    "#minecraft:block/terracotta",
+    "#minecraft:terracotta",
     "minecraft:sandstone",
     "minecraft:sand",
     "minecraft:soulsand",
@@ -21,7 +21,7 @@
     "minecraft:dirt_path",
     "minecraft:clay",
     "minecraft:dripstone_block",
-    "#minecraft:block/leaves",
-    "#minecraft:block/ice"
+    "#minecraft:leaves",
+    "#minecraft:ice"
   ]
 }

@@ -1,13 +1,13 @@
 {
   "values": [
-    "#minecraft:block/iron_ores",
-    "#minecraft:block/gold_ores",
-    "#minecraft:block/lapis_ores",
-    "#minecraft:block/redstone_ores",
-    "#minecraft:block/diamond_ores",
-    "#minecraft:block/emerald_ores",
-    "#minecraft:block/coal_ores",
-    "#minecraft:block/copper_ores",
+    "#minecraft:iron_ores",
+    "#minecraft:gold_ores",
+    "#minecraft:lapis_ores",
+    "#minecraft:redstone_ores",
+    "#minecraft:diamond_ores",
+    "#minecraft:emerald_ores",
+    "#minecraft:coal_ores",
+    "#minecraft:copper_ores",
     "minecraft:ancient_debris"
   ]
 }
