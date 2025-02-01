@@ -105,8 +105,8 @@ modrinth {
     token = br.readLine(); 
 
     projectId = 'ZBokE5rR' // The ID of your Modrinth project. Slugs will not work.
-    versionNumber = '0.5.0' // The (preferably SemVer) version of the mod. If not specified, it'll use the `version` declaration
-    versionName = '0.5.0-1.21.4' // The version title. If not specified, it'll use the version number
+    versionNumber = '1.0.0' // The (preferably SemVer) version of the mod. If not specified, it'll use the `version` declaration
+    versionName = '1.0.0-1.21.4' // The version title. If not specified, it'll use the version number
 	changelog = 'Updated the mod to use datapack tags to choose which blocks can be vein mined. Added shears to the list of tools that can be enchanted with manic miner.'
     uploadFile = remapJar // Tells Minotaur to use the remapped jar
     gameVersions = ['1.21.4'] // An array of game versions the version supports
