@@ -1,5 +1,6 @@
 package org.inferis.manicminer.events;
 
+import net.minecraft.registry.tag.TagKey;
 import org.inferis.manicminer.ManicMiner;
 import org.inferis.manicminer.logic.Drill;
 import org.inferis.manicminer.logic.VeinMinerSession;
@@ -69,9 +70,8 @@ public class ManicMinerEvents {
 
         var pos = session.initialPos;
         var blockState = session.world.getBlockState(pos);
-        var blockId = Registries.BLOCK.getId(blockState.getBlock()).toString();
         for (var drill: drills) {
-            if (drill.canHandle(blockId) && drill.isRightTool(pos)) {
+            if (drill.canHandle(blockState) && drill.isRightTool(pos)) {
                 return drill.drill(pos);
             }
         }

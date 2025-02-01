@@ -1,0 +1,27 @@
+{
+  "values": [
+    "minecraft:stone",
+    "minecraft:deepslate",
+    "minecraft:granite",
+    "minecraft:andesite",
+    "minecraft:diorite",
+    "minecraft:gravel",
+    "minecraft:tuff",
+    "minecraft:netherrack",
+    "minecraft:basalt",
+    "minecraft:blackstone",
+    "minecraft:hardened_clay",
+    "#minecraft:terracotta",
+    "minecraft:sandstone",
+    "minecraft:sand",
+    "minecraft:soulsand",
+    "minecraft:soulsoil",
+    "minecraft:dirt",
+    "minecraft:grass_block",
+    "minecraft:dirt_path",
+    "minecraft:clay",
+    "minecraft:dripstone_block",
+    "#minecraft:leaves",
+    "#minecraft:ice"
+  ]
+}
