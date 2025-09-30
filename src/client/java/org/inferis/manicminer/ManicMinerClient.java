@@ -17,7 +17,7 @@ public class ManicMinerClient implements ClientModInitializer {
 	@Override
 	public void onInitializeClient() {
 		hotKeyBinding = KeyBindingHelper.registerKeyBinding(new KeyBinding(
-				"manic-miner.key.hotkey_pressed",
+				"manicminer.key.hotkey_pressed",
 				InputUtil.Type.KEYSYM,
 				InputUtil.GLFW_KEY_V,
 				MANIC_MINER_KEYS_CATEGORY
