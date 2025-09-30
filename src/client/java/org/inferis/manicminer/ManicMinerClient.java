@@ -1,5 +1,6 @@
 package org.inferis.manicminer;
 
+import net.minecraft.util.Identifier;
 import org.inferis.manicminer.networking.HotKeyPressedPayload;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
@@ -9,16 +10,17 @@ import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.util.InputUtil;
 
 public class ManicMinerClient implements ClientModInitializer {
+	private static final KeyBinding.Category MANIC_MINER_KEYS_CATEGORY = KeyBinding.Category.create(Identifier.of(ManicMiner.MODID, "keys"));
 	private KeyBinding hotKeyBinding;
 	private Boolean isPressed = false;
 
 	@Override
 	public void onInitializeClient() {
 		hotKeyBinding = KeyBindingHelper.registerKeyBinding(new KeyBinding(
-			"manicminer.key.hotkey_pressed",
-			InputUtil.Type.KEYSYM,
-			InputUtil.GLFW_KEY_V,
-			"manicminer.category.keys"
+				"manicminer.key.hotkey_pressed",
+				InputUtil.Type.KEYSYM,
+				InputUtil.GLFW_KEY_V,
+				MANIC_MINER_KEYS_CATEGORY
 		));
 
 		ClientTickEvents.END_CLIENT_TICK.register(client -> {

@@ -16,7 +16,7 @@ import net.minecraft.world.World;
 
 public class ManicMinerEvents {
     public static boolean beforeBlockBreak(World world, ServerPlayerEntity player, BlockPos pos, BlockState state) {
-        if (world.isClient) {
+        if (world.isClient()) {
             return true;
         }
 
