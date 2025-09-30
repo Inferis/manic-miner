@@ -1,9 +1,9 @@
 {
     "anvil_cost": 4,
     "description": {
-      "translate": "manicminer.enchantment.manic_mining"
+      "translate": "manic-miner.enchantment.manic_mining"
     },
-    "exclusive_set": "#manicminer:exclusive_set/manic_mining",
+    "exclusive_set": "#manic-miner:exclusive_set/manic_mining",
     "max_cost": {
       "base": 60,
       "per_level_above_first": 9
@@ -16,6 +16,6 @@
     "slots": [
       "mainhand"
     ],
-    "supported_items": "#manicminer:enchantable/manic_mining_tools",
+    "supported_items": "#manic-miner:enchantable/manic_mining_tools",
     "weight": 2
   }
