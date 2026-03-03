@@ -1,5 +1,5 @@
 plugins {
-	id 'fabric-loom' version '1.11-SNAPSHOT'
+	id 'fabric-loom' version '1.15-SNAPSHOT'
 	id 'maven-publish'
     id "com.modrinth.minotaur" version "2.+"
 }
@@ -106,10 +106,10 @@ modrinth {
 
     projectId = 'ZBokE5rR' // The ID of your Modrinth project. Slugs will not work.
     versionNumber = '1.0.0' // The (preferably SemVer) version of the mod. If not specified, it'll use the `version` declaration
-    versionName = '1.0.0-1.21.10' // The version title. If not specified, it'll use the version number
-	changelog = 'Updated to 1.21.10.'
+    versionName = '1.0.0-1.21.11' // The version title. If not specified, it'll use the version number
+	changelog = 'Updated to 1.21.11.'
     uploadFile = remapJar // Tells Minotaur to use the remapped jar
-    gameVersions = ['1.21.10'] // An array of game versions the version supports
+    gameVersions = ['1.21.11'] // An array of game versions the version supports
     loaders = ['fabric'] // Self-explanatory.
     dependencies = [
             new ModDependency('P7dR8mSH', 'required'), // Fabric API
