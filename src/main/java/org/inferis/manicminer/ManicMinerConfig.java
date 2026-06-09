@@ -24,6 +24,7 @@ public class ManicMinerConfig {
     public int maxCommonSize = 128; // 2 stacks
     public int maxWoodSize = 192;
     public boolean summonItems = true;
+    public boolean highlightBlocks = true;
     
     public void save() {
         var file = new File(CONFIG_FILE);
@@ -55,6 +56,7 @@ public class ManicMinerConfig {
             maxVeinSize = loadedConfig.maxVeinSize;
             maxCommonSize = loadedConfig.maxCommonSize;
             maxWoodSize = loadedConfig.maxWoodSize;
+            highlightBlocks = loadedConfig.highlightBlocks;
             return true;
         }
         catch (FileNotFoundException e) {

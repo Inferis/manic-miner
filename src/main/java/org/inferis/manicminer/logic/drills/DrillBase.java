@@ -121,6 +121,16 @@ public class DrillBase implements Drill {
     }
 
     protected boolean tryBreakBlock(BlockPos blockPos) {
+        if (session.isDryRun()) {
+            if (session.positions.contains(blockPos)) {
+                return false; // already previewed, avoid re-processing
+            }
+            var canBreak = isRightTool(blockPos);
+            if (canBreak) {
+                session.addPosition(blockPos);
+            }
+            return canBreak;
+        }
         // we need a tool in order to break a block, so check always
         session.addPosition(blockPos);
         var success = isRightTool(blockPos) && session.player.interactionManager.tryBreakBlock(blockPos);

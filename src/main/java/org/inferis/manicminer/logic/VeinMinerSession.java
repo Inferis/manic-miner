@@ -5,9 +5,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import com.jcraft.jorbis.Block;
-
-import net.minecraft.entity.Entity;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
@@ -19,6 +16,7 @@ public class VeinMinerSession {
     public ServerWorld world;
     public Set<BlockPos> positions;
     public BlockPos initialPos;
+    private boolean isDryRun;
 
     public static VeinMinerSession sessionForPlayer(ServerPlayerEntity player) {
         for (var session: sessions) {
@@ -35,25 +33,36 @@ public class VeinMinerSession {
                 return session;
             }
         }
-        return null;       
-    }    
+        return null;
+    }
 
     public static VeinMinerSession start(ServerPlayerEntity player, ServerWorld world, BlockPos initialPos) {
-        var session = new VeinMinerSession(player, world, initialPos);
+        var session = new VeinMinerSession(player, world, initialPos, false);
         sessions.add(session);
         return session;
+    }
+
+    public static VeinMinerSession preview(ServerPlayerEntity player, ServerWorld world, BlockPos initialPos) {
+        return new VeinMinerSession(player, world, initialPos, true);
     }
 
     private static void finish(VeinMinerSession session) {
         sessions.remove(session);
     }
 
-    private VeinMinerSession(ServerPlayerEntity player, ServerWorld world, BlockPos initialPos) {
+    private VeinMinerSession(ServerPlayerEntity player, ServerWorld world, BlockPos initialPos, boolean isDryRun) {
         this.player = player;
         this.world = world;
         this.initialPos = initialPos;
+        this.isDryRun = isDryRun;
         this.positions = new HashSet<>();
-        positions.add(initialPos);
+        if (!isDryRun) {
+            positions.add(initialPos);
+        }
+    }
+
+    public boolean isDryRun() {
+        return isDryRun;
     }
 
     public void addPosition(BlockPos pos) {
@@ -65,6 +74,8 @@ public class VeinMinerSession {
     }
 
     public void finish() {
-        finish(this);
+        if (!isDryRun) {
+            finish(this);
+        }
     }
 }
