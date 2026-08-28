@@ -1,7 +1,10 @@
 package org.inferis.manicminer;
 
-import net.minecraft.client.render.RenderLayers;
-import net.minecraft.util.Identifier;
+import net.minecraft.client.KeyMapping;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
+import net.minecraft.client.renderer.ShapeRenderer;
+import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.resources.Identifier;
 import org.inferis.manicminer.networking.HighlightBlocksPayload;
 import org.inferis.manicminer.networking.HotKeyPressedPayload;
 import net.fabricmc.api.ClientModInitializer;
@@ -9,33 +12,31 @@ import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.client.rendering.v1.world.WorldRenderEvents;
-import net.minecraft.client.option.KeyBinding;
-import net.minecraft.client.render.RenderLayer;
-import net.minecraft.client.render.VertexRendering;
-import net.minecraft.client.util.InputUtil;
-import net.minecraft.util.shape.VoxelShapes;
-import net.minecraft.util.math.BlockPos;
+import com.mojang.blaze3d.platform.InputConstants;
+import net.minecraft.core.BlockPos;
 
 import java.util.List;
 
+import static org.lwjgl.glfw.GLFW.GLFW_KEY_V;
+
 public class ManicMinerClient implements ClientModInitializer {
-	private static final KeyBinding.Category MANIC_MINER_KEYS_CATEGORY = KeyBinding.Category.create(Identifier.of(ManicMiner.MODID, "keys"));
-	private KeyBinding hotKeyBinding;
+	private static final KeyMapping.Category MANIC_MINER_KEYS_CATEGORY = KeyMapping.Category.register(Identifier.fromNamespaceAndPath(ManicMiner.MODID, "keys"));
+	private KeyMapping hotKeyBinding;
 	private Boolean isPressed = false;
 
 	private static List<BlockPos> highlightedPositions = List.of();
 
 	@Override
 	public void onInitializeClient() {
-		hotKeyBinding = KeyBindingHelper.registerKeyBinding(new KeyBinding(
+		hotKeyBinding = KeyBindingHelper.registerKeyBinding(new KeyMapping(
 				"manicminer.key.hotkey_pressed",
-				InputUtil.Type.KEYSYM,
-				InputUtil.GLFW_KEY_V,
+				InputConstants.Type.KEYSYM,
+				GLFW_KEY_V,
 				MANIC_MINER_KEYS_CATEGORY
 		));
 
 		ClientTickEvents.END_CLIENT_TICK.register(client -> {
-			var pressed = hotKeyBinding.isPressed();
+			var pressed = hotKeyBinding.isDown();
 			if (isPressed != pressed) {
 				isPressed = pressed;
 				try {
@@ -56,23 +57,20 @@ public class ManicMinerClient implements ClientModInitializer {
 			if (positions.isEmpty()) return;
 
 			var consumers = context.consumers();
-			if (consumers == null) return;
-
 			var matrices = context.matrices();
-			if (matrices == null) return;
 
-			var buffer = consumers.getBuffer(RenderLayers.LINES);
-			var camera = context.gameRenderer().getCamera();
+			var buffer = consumers.getBuffer(RenderTypes.LINES);
+			var camera = context.gameRenderer().getMainCamera();
 
-			matrices.push();
-			matrices.translate(-camera.getCameraPos().x, -camera.getCameraPos().y, -camera.getCameraPos().z);
+			matrices.pushPose();
+			matrices.translate(-camera.position().x, -camera.position().y, -camera.position().z);
 
-			var shape = VoxelShapes.cuboid(0.001, 0.001, 0.001, 0.999, 0.999, 0.999);
+			var shape = Shapes.create(0.001, 0.001, 0.001, 0.999, 0.999, 0.999);
 			for (var pos : positions) {
-				VertexRendering.drawOutline(matrices, buffer, shape, pos.getX(), pos.getY(), pos.getZ(), 0xCCFFD900, 2.0f);
+				ShapeRenderer.renderShape(matrices, buffer, shape, pos.getX(), pos.getY(), pos.getZ(), 0xCCFFD900, 2.0f);
 			}
 
-			matrices.pop();
+			matrices.popPose();
 		});
 	}
 }

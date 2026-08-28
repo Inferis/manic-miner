@@ -1,16 +1,15 @@
 package org.inferis.manicminer.logic.drills;
 
-import net.minecraft.block.BlockState;
 import org.inferis.manicminer.logic.Drill;
 import org.inferis.manicminer.logic.VeinMinerSession;
 import org.inferis.manicminer.ManicMiner;
 
 import java.util.ArrayList;
-
-import net.minecraft.text.MutableText;
-import net.minecraft.text.PlainTextContent;
-import net.minecraft.text.Text;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.contents.PlainTextContents;
+import net.minecraft.world.level.block.state.BlockState;
 
 public class DrillBase implements Drill {
     protected VeinMinerSession session;
@@ -32,7 +31,7 @@ public class DrillBase implements Drill {
     @Override
     public boolean isRightTool(BlockPos pos) {
         var blockState = session.world.getBlockState(pos);
-        return session.player.getMainHandStack().isSuitableFor(blockState);
+        return session.player.getMainHandItem().isCorrectToolForDrops(blockState);
     }
 
     protected interface ForXYZHandler {
@@ -81,8 +80,8 @@ public class DrillBase implements Drill {
         }
         else {
             var player = session.player;
-            var majorPitchChange = player.getPitch() < -45.0 || player.getPitch() > 45.0; 
-            var majorYawChange = (player.getYaw() > 45.0 && player.getYaw() < 135.0) || (player.getYaw() < -45.0 && player.getYaw() > -135.0); 
+            var majorPitchChange = player.getXRot() < -45.0 || player.getXRot() > 45.0; 
+            var majorYawChange = (player.getYRot() > 45.0 && player.getYRot() < 135.0) || (player.getYRot() < -45.0 && player.getYRot() > -135.0); 
             if (majorPitchChange) {
                 if (majorYawChange) {
                     order = new String[] { "y", "z", "x" };
@@ -133,7 +132,7 @@ public class DrillBase implements Drill {
         }
         // we need a tool in order to break a block, so check always
         session.addPosition(blockPos);
-        var success = isRightTool(blockPos) && session.player.interactionManager.tryBreakBlock(blockPos);
+        var success = isRightTool(blockPos) && session.player.gameMode.destroyBlock(blockPos);
         if (!success) {
             session.removePosition(blockPos);
         }
@@ -141,9 +140,9 @@ public class DrillBase implements Drill {
     }
 
     protected void _log(String message) {
-        PlainTextContent literal = new PlainTextContent.Literal(message);
-        Text text = MutableText.of(literal);
-        session.player.sendMessage(text);
+        PlainTextContents literal = new PlainTextContents.LiteralContents(message);
+        Component text = MutableComponent.create(literal);
+        session.player.sendSystemMessage(text);
         ManicMiner.LOGGER.info(message);
     }
 }

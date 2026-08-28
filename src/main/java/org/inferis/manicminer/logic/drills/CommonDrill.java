@@ -1,28 +1,27 @@
 package org.inferis.manicminer.logic.drills;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.registry.tag.TagKey;
-import net.minecraft.util.Identifier;
 import org.inferis.manicminer.ManicMiner;
 import org.inferis.manicminer.logic.VeinMinerSession;
 
 import java.util.ArrayDeque;
-
-import net.minecraft.block.Block;
-import net.minecraft.registry.Registries;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.Identifier;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
 
 public class CommonDrill extends DrillBase {
     public CommonDrill(VeinMinerSession session) {
         super(session);
     }
 
-    public static final TagKey<Block> commonTag = TagKey.of(RegistryKeys.BLOCK, Identifier.of("manicminer", "common"));
+    public static final TagKey<Block> commonTag = TagKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath("manicminer", "common"));
 
     @Override
     public boolean canHandle(BlockState blockState) {
-        return ManicMiner.CONFIG.allowCommonBlocks && blockState.isIn(commonTag);
+        return ManicMiner.CONFIG.allowCommonBlocks && blockState.is(commonTag);
     }
 
     @Override
@@ -30,7 +29,7 @@ public class CommonDrill extends DrillBase {
         var world = session.world;
         var player = session.player;
         var initialBlock = world.getBlockState(startPos).getBlock();
-        var initialBlockId = Registries.BLOCK.getId(initialBlock).toString();
+        var initialBlockId = BuiltInRegistries.BLOCK.getKey(initialBlock).toString();
         var forceVertical = initialBlockId.equals("minecraft:dripstone_block"); // we want to mine up/down for dripstone
         var broken = 0;
         var pending = new ArrayDeque<BlockPos>();
@@ -53,7 +52,7 @@ public class CommonDrill extends DrillBase {
                 forXYZ(blockPos, 2, newPos -> {
                     var block = world.getBlockState(newPos).getBlock();
                     if (blocksMatch(block, initialBlock) && !pending.contains(newPos)) {
-                        var lookingDown = player.getPitch() > 33.0;
+                        var lookingDown = player.getXRot() > 33.0;
                         if (lookingDown || newPos.getY() >= player.getBlockY()) {
                             pending.add(newPos);
                         } 
@@ -71,8 +70,8 @@ public class CommonDrill extends DrillBase {
         }
 
         // special case for dirt
-        var blockAId = Registries.BLOCK.getId(blockA).toString();
-        var blockBId = Registries.BLOCK.getId(blockB).toString();
+        var blockAId = BuiltInRegistries.BLOCK.getKey(blockA).toString();
+        var blockBId = BuiltInRegistries.BLOCK.getKey(blockB).toString();
 
         var isBlockADirt = blockAId.equals("minecraft:dirt") || blockAId.equals("minecraft:grass_block") || blockAId.equals("minecraft:dirt_path");
         var isBlockBDirt = blockBId.equals("minecraft:dirt") || blockBId.equals("minecraft:grass_block") || blockBId.equals("minecraft:dirt_path");

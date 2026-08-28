@@ -1,20 +1,19 @@
 package org.inferis.manicminer.networking;
 
-import net.minecraft.network.RegistryByteBuf;
-import net.minecraft.network.codec.PacketCodec;
-import net.minecraft.network.packet.CustomPayload;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.math.BlockPos;
-
 import java.util.ArrayList;
 import java.util.List;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.minecraft.resources.Identifier;
 
-public record HighlightBlocksPayload(List<BlockPos> positions) implements CustomPayload {
-    public static final Id<HighlightBlocksPayload> ID = new CustomPayload.Id<>(Identifier.of("manicminer:highlight_blocks"));
+public record HighlightBlocksPayload(List<BlockPos> positions) implements CustomPacketPayload {
+    public static final Type<HighlightBlocksPayload> ID = new CustomPacketPayload.Type<>(Identifier.parse("manicminer:highlight_blocks"));
 
-    public static final PacketCodec<RegistryByteBuf, HighlightBlocksPayload> CODEC = new PacketCodec<>() {
+    public static final StreamCodec<RegistryFriendlyByteBuf, HighlightBlocksPayload> CODEC = new StreamCodec<>() {
         @Override
-        public HighlightBlocksPayload decode(RegistryByteBuf buf) {
+        public HighlightBlocksPayload decode(RegistryFriendlyByteBuf buf) {
             int size = buf.readVarInt();
             var positions = new ArrayList<BlockPos>(size);
             for (int i = 0; i < size; i++) {
@@ -24,7 +23,7 @@ public record HighlightBlocksPayload(List<BlockPos> positions) implements Custom
         }
 
         @Override
-        public void encode(RegistryByteBuf buf, HighlightBlocksPayload value) {
+        public void encode(RegistryFriendlyByteBuf buf, HighlightBlocksPayload value) {
             buf.writeVarInt(value.positions().size());
             for (var pos : value.positions()) {
                 buf.writeBlockPos(pos);
@@ -33,7 +32,7 @@ public record HighlightBlocksPayload(List<BlockPos> positions) implements Custom
     };
 
     @Override
-    public Id<? extends CustomPayload> getId() {
+    public Type<? extends CustomPacketPayload> type() {
         return ID;
     }
 }

@@ -1,17 +1,15 @@
 package org.inferis.manicminer.logic.drills;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.registry.tag.TagKey;
-import net.minecraft.util.Identifier;
 import org.inferis.manicminer.ManicMiner;
 import org.inferis.manicminer.logic.VeinMinerSession;
 
 import java.util.ArrayDeque;
-
-import net.minecraft.registry.Registries;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.Identifier;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
 
 public class OreDrill extends DrillBase {
 
@@ -19,11 +17,11 @@ public class OreDrill extends DrillBase {
         super(session);
     }
 
-    public static final TagKey<Block> oreTag = TagKey.of(RegistryKeys.BLOCK, Identifier.of("manicminer", "ore"));
+    public static final TagKey<Block> oreTag = TagKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath("manicminer", "ore"));
 
     @Override
     public boolean canHandle(BlockState blockState) {
-        return blockState.isIn(oreTag);
+        return blockState.is(oreTag);
     }
 
     @Override

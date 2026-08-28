@@ -1,17 +1,16 @@
 package org.inferis.manicminer.logic.drills;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.registry.tag.TagKey;
-import net.minecraft.util.Identifier;
 import org.inferis.manicminer.ManicMiner;
 import org.inferis.manicminer.logic.VeinMinerSession;
 
 import java.util.ArrayDeque;
-
-import net.minecraft.block.Block;
-import net.minecraft.registry.Registries;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.Identifier;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
 
 public class WoodDrill extends DrillBase {
 
@@ -19,11 +18,11 @@ public class WoodDrill extends DrillBase {
         super(session);
     }
 
-    public static final TagKey<Block> woodTag = TagKey.of(RegistryKeys.BLOCK, Identifier.of("manicminer", "wood"));
+    public static final TagKey<Block> woodTag = TagKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath("manicminer", "wood"));
 
     @Override
     public boolean canHandle(BlockState blockState) {
-        return blockState.isIn(woodTag);
+        return blockState.is(woodTag);
     }
 
     @Override
@@ -35,7 +34,7 @@ public class WoodDrill extends DrillBase {
         pendingLogs.add(startPos);
 
         // have to get this id here while the actual block is still there (iso air)
-        var leavesBlockId = Registries.BLOCK.getId(world.getBlockState(startPos).getBlock()).toString().replace("_log", "_leaves");
+        var leavesBlockId = BuiltInRegistries.BLOCK.getKey(world.getBlockState(startPos).getBlock()).toString().replace("_log", "_leaves");
 
         while (!pendingLogs.isEmpty() && broken < ManicMiner.CONFIG.maxWoodSize) {
             BlockPos woodPos = pendingLogs.remove();
@@ -63,7 +62,7 @@ public class WoodDrill extends DrillBase {
             broken += forXYZ(pendingLeaves.remove(), 1, newPos -> {
                 int brokenLeaves = 0;
                 var newBlock = world.getBlockState(newPos).getBlock();
-                var newBlockId = Registries.BLOCK.getId(newBlock).toString();
+                var newBlockId = BuiltInRegistries.BLOCK.getKey(newBlock).toString();
                 if (newBlockId.equals(leavesBlockId)) {
                     if (tryBreakBlock(newPos)) {
                         brokenLeaves += 1;
@@ -77,7 +76,7 @@ public class WoodDrill extends DrillBase {
     }
 
     private boolean isLeaf(Block block) {
-        return Registries.BLOCK.getId(block).toString().endsWith("_leaves");
+        return BuiltInRegistries.BLOCK.getKey(block).toString().endsWith("_leaves");
     }
     
 }
