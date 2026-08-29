@@ -102,8 +102,8 @@ public class ManicMiner implements ModInitializer {
 	}
 
 	public void registerPayloadAndReceiver() {
-		PayloadTypeRegistry.playC2S().register(HotKeyPressedPayload.ID, HotKeyPressedPayload.CODEC);
-		PayloadTypeRegistry.playS2C().register(HighlightBlocksPayload.ID, HighlightBlocksPayload.CODEC);
+		PayloadTypeRegistry.serverboundPlay().register(HotKeyPressedPayload.ID, HotKeyPressedPayload.CODEC);
+		PayloadTypeRegistry.clientboundPlay().register(HighlightBlocksPayload.ID, HighlightBlocksPayload.CODEC);
 
 		// Register payload receiver. The client will send the payload to the server, which
 		// will then in turn set the right mode on the magnet items.

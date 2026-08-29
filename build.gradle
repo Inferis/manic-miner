@@ -1,5 +1,5 @@
 plugins {
-	id 'fabric-loom' version '1.15-SNAPSHOT'
+	id 'net.fabricmc.fabric-loom' version '1.17-SNAPSHOT'
 	id 'maven-publish'
     id "com.modrinth.minotaur" version "2.+"
 }
@@ -32,30 +32,29 @@ loom {
 dependencies {
 	// To change the versions see the gradle.properties file
 	minecraft "com.mojang:minecraft:${project.minecraft_version}"
-	mappings loom.officialMojangMappings()
-	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+	implementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
 	// Fabric API. This is technically optional, but you probably want it anyway.
-	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+	implementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
     
-	modApi("me.shedaniel.cloth:cloth-config-fabric:15.0.127") {
+	api("me.shedaniel.cloth:cloth-config-fabric:26.2.155") {
         exclude(group: "net.fabricmc.fabric-api")
     }
-	modApi "com.terraformersmc:modmenu:11.0.1"
+	api "com.terraformersmc:modmenu:20.0.1"
 
 	implementation 'com.google.code.gson:gson:2.11.0'
 }
 
-processResources {
-	inputs.property "version", project.version
-
-	filesMatching("fabric.mod.json") {
-		expand "version": project.version
-	}
-}
+//processResources {
+//	inputs.property "version", project.version
+//
+//	filesMatching("fabric.mod.json") {
+//		expand "version": project.version
+//	}
+//}
 
 tasks.withType(JavaCompile).configureEach {
-	it.options.release = 21
+	it.options.release = 25
 }
 
 java {
@@ -64,15 +63,15 @@ java {
 	// If you remove this line, sources will not be generated.
 	withSourcesJar()
 
-	sourceCompatibility = JavaVersion.VERSION_21
-	targetCompatibility = JavaVersion.VERSION_21
+	sourceCompatibility = JavaVersion.VERSION_25
+	targetCompatibility = JavaVersion.VERSION_25
 }
 
-jar {
-	from("LICENSE") {
-		rename { "${it}_${project.base.archivesName.get()}"}
-	}
-}
+//jar {
+//	from("LICENSE") {
+//		rename { "${it}_${project.base.archivesName.get()}"}
+//	}
+//}
 
 // configure the maven publication
 publishing {
@@ -92,27 +91,26 @@ publishing {
 	}
 }
 
-import com.modrinth.minotaur.dependencies.ModDependency
+//import com.modrinth.minotaur.dependencies.ModDependency
 
-modrinth {
-	var tokenFileName = ".modrinth_token";
-	File tokenFile = new File(tokenFileName);
-	if (!tokenFile.exists()) {
-		return;		
-	}
-
-	BufferedReader br = new BufferedReader(new FileReader(".modrinth_token"));
-    token = br.readLine(); 
-
-    projectId = 'ZBokE5rR' // The ID of your Modrinth project. Slugs will not work.
-    versionNumber = '1.1.0' // The (preferably SemVer) version of the mod. If not specified, it'll use the `version` declaration
-    versionName = '1.1.0-1.21.11' // The version title. If not specified, it'll use the version number
-	changelog = 'Fixed a bug where one player veinmining would veinmine for all players. Added highlight for blocks to be veinmined.'
-    uploadFile = remapJar // Tells Minotaur to use the remapped jar
-    gameVersions = ['1.21.11'] // An array of game versions the version supports
-    loaders = ['fabric'] // Self-explanatory.
-    dependencies = [
-            new ModDependency('P7dR8mSH', 'required'), // Fabric API
-            new ModDependency('9s6osm5g', 'optional')  // Cloth Config
-    ]
-}
+//modrinth {
+//	var tokenFileName = ".modrinth_token";
+//	File tokenFile = new File(tokenFileName);
+//	if (!tokenFile.exists()) {
+//		return;
+//	}
+//
+//	BufferedReader br = new BufferedReader(new FileReader(".modrinth_token"));
+//    token = br.readLine();
+//
+//    projectId = 'ZBokE5rR' // The ID of your Modrinth project. Slugs will not work.
+//    versionNumber = '1.1.0' // The (preferably SemVer) version of the mod. If not specified, it'll use the `version` declaration
+//    versionName = '1.1.0-26.2' // The version title. If not specified, it'll use the version number
+//	changelog = 'Fixed a bug where one player veinmining would veinmine for all players. Added highlight for blocks to be veinmined.'
+//    gameVersions = ['26.2'] // An array of game versions the version supports
+//    loaders = ['fabric'] // Self-explanatory.
+//    dependencies = [
+//            new ModDependency('P7dR8mSH', 'required'), // Fabric API
+//            new ModDependency('9s6osm5g', 'optional')  // Cloth Config
+//    ]
+//}
