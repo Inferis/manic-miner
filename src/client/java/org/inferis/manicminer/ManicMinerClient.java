@@ -14,12 +14,10 @@ import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.client.rendering.v1.level.LevelRenderEvents;
 import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.core.BlockPos;
-import org.slf4j.event.Level;
 
 import java.util.List;
 
 import static net.fabricmc.fabric.api.event.Event.DEFAULT_PHASE;
-import static org.lwjgl.glfw.GLFW.GLFW_KEY_V;
 
 public class ManicMinerClient implements ClientModInitializer {
 	private static final KeyMapping.Category MANIC_MINER_KEYS_CATEGORY = KeyMapping.Category.register(Identifier.fromNamespaceAndPath(ManicMiner.MODID, "keys"));
@@ -32,8 +30,8 @@ public class ManicMinerClient implements ClientModInitializer {
 	public void onInitializeClient() {
 		hotKeyBinding = KeyMappingHelper.registerKeyMapping(new KeyMapping(
 				"manicminer.key.hotkey_pressed",
-				InputConstants.Type.KEYSYM,
-				GLFW_KEY_V,
+				InputConstants.Type.KEYBOARD,
+				InputConstants.KEY_V,
 				MANIC_MINER_KEYS_CATEGORY
 		));
 

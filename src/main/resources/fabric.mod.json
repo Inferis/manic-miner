@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"id": "manic-miner",
-	"version": "1.1.0-26.2",
+	"version": "${version}",
 	"name": "Manic Miner",
 	"description": "This is a (server side) vein miner mod. To activate, sneak and mine. No special enchantment needed. Supports 3 modes: ore veins, common blocks and trees.",
 	"authors": [
@@ -34,8 +34,8 @@
 		}
 	],
 	"depends": {
-		"fabricloader": ">=0.19.3",
-		"minecraft": "26.2",
+		"fabricloader": ">=0.19.5",
+		"minecraft": "26.3-pre.1",
 		"java": ">=25",
 		"fabric-api": "*"
 	},
