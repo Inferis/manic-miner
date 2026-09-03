@@ -3,6 +3,7 @@ package org.inferis.manicminer.renderer;
 import net.fabricmc.fabric.api.client.rendering.v1.level.LevelRenderEvents;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.Shapes;
 
 import java.util.List;
@@ -28,16 +29,18 @@ public class PositionHighlightRenderer {
             poseStack.translate(-camera.position().x, -camera.position().y, -camera.position().z);
 
             var collector = context.submitNodeCollector();
-            var shape = Shapes.create(0.001, 0.001, 0.001, 0.999, 0.999, 0.999);
+            var combinedShape = Shapes.empty();
+            var shape = Shapes.create(-0.001, -0.001, -0.001, 1.001, 1.001, 1.001);
             for (var pos: positions) {
-                poseStack.pushPose();
-                poseStack.translate(pos.getX(), pos.getY(), pos.getZ());
-                // Ghost outline visible through occluding blocks (ALWAYS_PASS depth, translucent)
-                collector.submitShapeOutline(poseStack, shape, ManicMinerRenderTypes.linesAlwaysPassDepth(), 0x33FFD900, 1.5f, true);
-                // Solid outline for visible parts (normal depth testing)
-                collector.submitShapeOutline(poseStack, shape, RenderTypes.lines(), 0xFFFFD900, 3.0f, true);
-                poseStack.popPose();
+                // Create combined shape to highlight
+                var outlinePosShape = shape.move(pos.getX(), pos.getY(), pos.getZ());
+                combinedShape = Shapes.join(combinedShape, outlinePosShape, BooleanOp.OR);
             }
+
+            // Ghost outline visible through occluding blocks (ALWAYS_PASS depth, translucent)
+            collector.submitShapeOutline(poseStack, combinedShape, ManicMinerRenderTypes.linesAlwaysPassDepth(), 0x66FFD900, 1.5f, true);
+            // Solid outline for visible parts (normal depth testing)
+            collector.submitShapeOutline(poseStack, combinedShape, RenderTypes.lines(), 0xFFFFD900, 3.0f, true);
 
             poseStack.popPose();
         });
