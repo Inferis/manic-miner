@@ -50,11 +50,7 @@ public class ManicMinerRenderTypes {
                     .build();
 
             var setup = RenderSetup.builder(pipeline).createRenderSetup();
-
-            // RenderType.create() is package-private so we reach it via reflection.
-            var method = RenderType.class.getDeclaredMethod("create", String.class, RenderSetup.class);
-            method.setAccessible(true);
-            return (RenderType) method.invoke(null, identifier.toString(), setup);
+            return RenderType.create(identifier.toString(), setup);
         } catch (Exception e) {
             throw new RuntimeException("Failed to create lines-always-pass-depth render type", e);
         }
