@@ -54,28 +54,27 @@ public class ManicMinerClient implements ClientModInitializer {
 			highlightedPositions = payload.positions();
 		});
 
-		LevelRenderEvents.BEFORE_BLOCK_OUTLINE.register(DEFAULT_PHASE, (context, outlineRenderState) -> {
+		LevelRenderEvents.AFTER_TRANSLUCENT_TERRAIN.register(DEFAULT_PHASE,context -> {
 			List<BlockPos> positions = highlightedPositions;
-			if (positions.isEmpty()) return false;
+			if (positions.isEmpty()) return;
 
-			OrderedSubmitNodeCollector collector = context.submitNodeCollector();
-
-			var matrices = context.poseStack();
+			var poseStack = context.poseStack();
 			var camera = context.gameRenderer().mainCamera();
 
-			matrices.pushPose();
-			matrices.translate(-camera.position().x, -camera.position().y, -camera.position().z);
+			poseStack.pushPose();
+			poseStack.translate(-camera.position().x, -camera.position().y, -camera.position().z);
 
+			var collector = context.submitNodeCollector();
 			var shape = Shapes.create(0.001, 0.001, 0.001, 0.999, 0.999, 0.999);
-			for (BlockPos pos : positions) {
-				matrices.pushPose();
-				matrices.translate(pos.getX(), pos.getY(), pos.getZ());
-				collector.submitShapeOutline(matrices, shape, RenderTypes.LINES, 0xCCFFD900, 2.0f, true);
-				matrices.popPose();
+			for (var pos: positions) {
+				poseStack.pushPose();
+				poseStack.translate(pos.getX(), pos.getY(), pos.getZ());
+				collector.submitShapeOutline(poseStack, shape, RenderTypes.LINES, 0xCCFFD900, 3.0f, false);
+				poseStack.popPose();
 			}
 
-			matrices.popPose();
-			return true;
+			poseStack.popPose();
+			return;
 		});
 	}
 }
