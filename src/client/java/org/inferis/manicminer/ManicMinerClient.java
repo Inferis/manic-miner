@@ -1,8 +1,10 @@
 package org.inferis.manicminer;
 
 import net.minecraft.client.KeyMapping;
+import net.minecraft.client.renderer.BindGroupLayouts;
+import net.minecraft.client.renderer.rendertype.RenderSetup;
+import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
-import net.minecraft.client.renderer.OrderedSubmitNodeCollector;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.resources.Identifier;
 import org.inferis.manicminer.networking.HighlightBlocksPayload;
@@ -14,7 +16,7 @@ import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.client.rendering.v1.level.LevelRenderEvents;
 import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.core.BlockPos;
-import org.slf4j.event.Level;
+import org.inferis.manicminer.renderer.ManicMinerRenderTypes;
 
 import java.util.List;
 
@@ -54,7 +56,11 @@ public class ManicMinerClient implements ClientModInitializer {
 			highlightedPositions = payload.positions();
 		});
 
-		LevelRenderEvents.AFTER_TRANSLUCENT_TERRAIN.register(DEFAULT_PHASE,context -> {
+		LevelRenderEvents.BEFORE_BLOCK_OUTLINE.register(DEFAULT_PHASE,(context, outlineRenderState) -> {
+			return highlightedPositions.isEmpty();
+		});
+
+		LevelRenderEvents.END_MAIN.register(DEFAULT_PHASE,context -> {
 			List<BlockPos> positions = highlightedPositions;
 			if (positions.isEmpty()) return;
 
@@ -69,12 +75,14 @@ public class ManicMinerClient implements ClientModInitializer {
 			for (var pos: positions) {
 				poseStack.pushPose();
 				poseStack.translate(pos.getX(), pos.getY(), pos.getZ());
-				collector.submitShapeOutline(poseStack, shape, RenderTypes.LINES, 0xCCFFD900, 3.0f, false);
+				// Ghost outline visible through occluding blocks (ALWAYS_PASS depth, translucent)
+				collector.submitShapeOutline(poseStack, shape, ManicMinerRenderTypes.linesAlwaysPassDepth(), 0x33FFD900, 1.5f, true);
+				// Solid outline for visible parts (normal depth testing)
+				collector.submitShapeOutline(poseStack, shape, RenderTypes.lines(), 0xFFFFD900, 3.0f, true);
 				poseStack.popPose();
 			}
 
 			poseStack.popPose();
-			return;
 		});
 	}
 }
