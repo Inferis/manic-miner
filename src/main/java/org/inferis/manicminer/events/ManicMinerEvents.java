@@ -35,7 +35,7 @@ public class ManicMinerEvents {
         if (ManicMiner.CONFIG.mustSneak && !player.isCrouching()) {
             return false;
         }
-        if (ManicMiner.CONFIG.requiresHotKey && !ManicMiner.IsPlayerPressingHotKey(player)) {
+        if (ManicMiner.CONFIG.requiresHotKey && !ManicMiner.HOTKEY_PRESSED_TRACKER.isPlayerPressingHotKey(player)) {
             return false;
         }
         if (ManicMiner.CONFIG.requireEnchantment) {
