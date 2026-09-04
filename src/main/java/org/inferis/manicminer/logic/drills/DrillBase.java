@@ -1,5 +1,7 @@
 package org.inferis.manicminer.logic.drills;
 
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.LevelEvent;
 import org.inferis.manicminer.logic.Drill;
 import org.inferis.manicminer.logic.VeinMinerSession;
 import org.inferis.manicminer.ManicMiner;
@@ -132,8 +134,12 @@ public class DrillBase implements Drill {
         }
         // we need a tool in order to break a block, so check always
         session.addPosition(blockPos);
+        var blockState = session.world.getBlockState(blockPos); // need to get this before destroying
         var success = isRightTool(blockPos) && session.player.gameMode.destroyBlock(blockPos);
-        if (!success) {
+        if (success) {
+            session.world.levelEvent(LevelEvent.PARTICLES_DESTROY_BLOCK, blockPos, Block.getId(blockState));
+        }
+        else {
             session.removePosition(blockPos);
         }
         return success;
