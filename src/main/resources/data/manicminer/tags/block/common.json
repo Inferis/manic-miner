@@ -10,6 +10,7 @@
     "minecraft:netherrack",
     "minecraft:basalt",
     "minecraft:blackstone",
+    "minecraft:nether_quartz_ore",
     "#minecraft:terracotta",
     "minecraft:sandstone",
     "minecraft:sand",
@@ -21,6 +22,8 @@
     "minecraft:clay",
     "minecraft:dripstone_block",
     "#minecraft:leaves",
-    "#minecraft:ice"
+    "#minecraft:ice",
+    "minecraft:nether_wart_block",
+    "minecraft:warped_wart_block"
   ]
 }
